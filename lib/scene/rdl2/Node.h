@@ -26,7 +26,7 @@ public:
     static SceneObjectInterface declare(SceneClass& sceneClass);
 
     // Attributes common to all Nodes.
-    static AttributeKey<Mat4d> sNodeXformKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Mat4d> sNodeXformKey;
 };
 
 template <>

@@ -120,28 +120,28 @@ public:
     bool requiresGeometryUpdate(UpdateHelper& sceneObjects, int depth);
 
     // Attributes common to all Geometries.
-    static AttributeKey<String> sLabel;
-    static AttributeKey<SceneObjectVector> sReferenceGeometries;
-    static AttributeKey<Bool> sStaticKey;
-    static AttributeKey<Int> sSideTypeKey;
-    static AttributeKey<Bool> sReverseNormals;
-    static AttributeKey<Bool> sVisibleCamera;
-    static AttributeKey<Bool> sVisibleShadow;
-    static AttributeKey<Bool> sVisibleDiffuseReflection;
-    static AttributeKey<Bool> sVisibleDiffuseTransmission;
-    static AttributeKey<Bool> sVisibleGlossyReflection;
-    static AttributeKey<Bool> sVisibleGlossyTransmission;
-    static AttributeKey<Bool> sVisibleMirrorReflection;
-    static AttributeKey<Bool> sVisibleMirrorTransmission;
-    static AttributeKey<Bool> sVisiblePhase;
-    static AttributeKey<Float> sRayEpsilon;
-    static AttributeKey<Float> sShadowRayEpsilon;
-    static AttributeKey<String> sShadowReceiverLabel;
-    static AttributeKey<String> sShadowExclusionMappings;
-    static AttributeKey<Bool> sContainsCamera;
-    static AttributeKey<SceneObject*> sDicingCamera;
-    static AttributeKey<Bool> sUseLocalMotionBlur;
-    static AttributeKey<Bool> sUseLocalCameraMotionBlur;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sLabel;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sReferenceGeometries;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sStaticKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sSideTypeKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sReverseNormals;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleCamera;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleShadow;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleDiffuseReflection;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleDiffuseTransmission;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleGlossyReflection;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleGlossyTransmission;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleMirrorReflection;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleMirrorTransmission;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisiblePhase;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sRayEpsilon;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sShadowRayEpsilon;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sShadowReceiverLabel;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sShadowExclusionMappings;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sContainsCamera;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject*> sDicingCamera;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sUseLocalMotionBlur;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sUseLocalCameraMotionBlur;
 
     /// Returns whether the internal procedural geometric data has been deformed.
     /// WARNING: assumes that procedural exists, verify that getProcedural

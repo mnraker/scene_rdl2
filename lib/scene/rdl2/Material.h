@@ -29,11 +29,11 @@ class Material : public RootShader
 public:
     typedef RootShader Parent;
 
-    static AttributeKey<SceneObject *> sExtraAovsKey;
-    static AttributeKey<String> sLabel;
-    static AttributeKey<Int> sPriority;
-    static AttributeKey<Bool> sRecordReflectedCryptomatte;
-    static AttributeKey<Bool> sRecordRefractedCryptomatte;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject *> sExtraAovsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sLabel;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sPriority;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sRecordReflectedCryptomatte;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sRecordRefractedCryptomatte;
 
     Material(const SceneClass& sceneClass, const std::string& name);
     virtual ~Material();

@@ -41,49 +41,49 @@ public:
     int getVisibilityMask() const;
 
     // Attributes common to all Lights.
-    static AttributeKey<Bool>  sOnKey;
-    static AttributeKey<Bool>  sMbKey;
-    static AttributeKey<Int> sVisibleInCameraKey;
-    static AttributeKey<Rgb> sColorKey;
-    static AttributeKey<Float> sIntensityKey;
-    static AttributeKey<Float> sExposureKey;
-    static AttributeKey<Float> sMaxShadowDistanceKey;
-    static AttributeKey<Float> sMinShadowDistanceKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool>  sOnKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool>  sMbKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sVisibleInCameraKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sColorKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sIntensityKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sExposureKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sMaxShadowDistanceKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sMinShadowDistanceKey;
     /// enum PresenceShadows {
     ///    PRESENCE_SHADOWS_OFF,         // Presence shadows off for this light.
     ///    PRESENCE_SHADOWS_ON,          // Presence shadows on for this light.
     ///    PRESENCE_SHADOWS_USE_GLOBAL,  // Use "enable presence shadows" from scene vars.
     /// };
-    static AttributeKey<Int> sPresenceShadowsKey;
-    static AttributeKey<Bool> sRayTerminationKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sPresenceShadowsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sRayTerminationKey;
     /// see enum class TextureFilterType above
-    static AttributeKey<Int> sTextureFilterKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sTextureFilterKey;
 
-    static AttributeKey<String> sTextureKey;
-    static AttributeKey<Rgb> sSaturationKey;
-    static AttributeKey<Rgb> sContrastKey;
-    static AttributeKey<Rgb> sGammaKey;
-    static AttributeKey<Rgb> sGainKey;
-    static AttributeKey<Rgb> sOffsetKey;
-    static AttributeKey<Vec3f> sTemperatureKey;
-    static AttributeKey<Float> sTextureRotationKey;
-    static AttributeKey<Vec2f> sTextureTranslationKey;
-    static AttributeKey<Vec2f> sTextureCoverageKey;
-    static AttributeKey<Float> sTextureRepsUKey;
-    static AttributeKey<Float> sTextureRepsVKey;
-    static AttributeKey<Bool> sTextureMirrorUKey;
-    static AttributeKey<Bool> sTextureMirrorVKey;
-    static AttributeKey<Rgb> sTextureBorderColorKey;
-    static AttributeKey<SceneObjectVector> sLightFiltersKey;
-    static AttributeKey<String> sLabel;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sTextureKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sSaturationKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sContrastKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sGammaKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sGainKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sOffsetKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec3f> sTemperatureKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sTextureRotationKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec2f> sTextureTranslationKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec2f> sTextureCoverageKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sTextureRepsUKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sTextureRepsVKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sTextureMirrorUKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sTextureMirrorVKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sTextureBorderColorKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sLightFiltersKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sLabel;
 
     // visibility flags
-    static AttributeKey<Bool> sVisibleDiffuseReflection;
-    static AttributeKey<Bool> sVisibleDiffuseTransmission;
-    static AttributeKey<Bool> sVisibleGlossyReflection;
-    static AttributeKey<Bool> sVisibleGlossyTransmission;
-    static AttributeKey<Bool> sVisibleMirrorReflection;
-    static AttributeKey<Bool> sVisibleMirrorTransmission;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleDiffuseReflection;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleDiffuseTransmission;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleGlossyReflection;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleGlossyTransmission;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleMirrorReflection;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sVisibleMirrorTransmission;
 };
 
 template <>

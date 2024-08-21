@@ -437,7 +437,7 @@ public:
     std::string showAllAttributes() const; // returns all attribute info as a string for display purposes
 
     // Metadata Keys
-    static const std::string sComment;
+    RDL2_DSO_BUILTIN_API static const std::string sComment;
 
 private:
     typedef std::unordered_map<std::string, Attribute*> AttributeMap;

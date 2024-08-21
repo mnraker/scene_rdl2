@@ -84,11 +84,11 @@ public:
         return get(sSurfaceOpacityThreshold);
     }
 
-    static AttributeKey<String> sLabel;
-    static AttributeKey<Int> sBakeResolutionMode;
-    static AttributeKey<Int> sBakeDivisions;
-    static AttributeKey<Float> sBakeVoxelSize;
-    static AttributeKey<Float> sSurfaceOpacityThreshold;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sLabel;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sBakeResolutionMode;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sBakeDivisions;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sBakeVoxelSize;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sSurfaceOpacityThreshold;
 };
 
 

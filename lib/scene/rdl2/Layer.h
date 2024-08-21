@@ -426,13 +426,13 @@ private:
                         int depth);
 
 private:
-    static AttributeKey<SceneObjectVector> sDisplacementsKey;
-    static AttributeKey<SceneObjectVector> sVolumeShadersKey;
-    static AttributeKey<SceneObjectVector> sSurfaceShadersKey;
-    static AttributeKey<SceneObjectVector> sLightSetsKey;
-    static AttributeKey<SceneObjectVector> sLightFilterSetsKey;
-    static AttributeKey<SceneObjectVector> sShadowSetsKey;
-    static AttributeKey<SceneObjectVector> sShadowReceiverSetsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sDisplacementsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sVolumeShadersKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sSurfaceShadersKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sLightSetsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sLightFilterSetsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sShadowSetsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sShadowReceiverSetsKey;
 
     bool mLightSetsChanged;
     bool mLightFilterSetsChanged;

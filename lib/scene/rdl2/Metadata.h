@@ -59,9 +59,9 @@ public:
     }
 
 private:
-    static AttributeKey<StringVector> sNameKey;
-    static AttributeKey<StringVector> sTypeKey;
-    static AttributeKey<StringVector> sValueKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<StringVector> sNameKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<StringVector> sTypeKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<StringVector> sValueKey;
 
     // Classes requiring access for serialization.
     friend class AsciiWriter;

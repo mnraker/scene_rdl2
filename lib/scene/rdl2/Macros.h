@@ -13,7 +13,19 @@
 #endif
 
 // Macro for marking symbols which should be exported from RDL2 DSOs.
-#define RDL2_DSO_EXPORT __attribute__((visibility("default")))
+#ifdef _MSC_VER
+	#define RDL2_DSO_IMPORT __declspec(dllimport)
+	#define RDL2_DSO_EXPORT __declspec(dllexport)
+#else
+	#define RDL2_DSO_IMPORT __attribute__((visibility("default")))
+	#define RDL2_DSO_EXPORT __attribute__((visibility("default")))
+#endif
+
+#ifdef RDL2_DSO_BUILTIN_EXPORTS
+	#define RDL2_DSO_BUILTIN_API RDL2_DSO_EXPORT
+#else
+	#define RDL2_DSO_BUILTIN_API RDL2_DSO_IMPORT
+#endif
 
 // Marks the start of a block of SceneClass attribute declarations in an RDL2
 // DSO.

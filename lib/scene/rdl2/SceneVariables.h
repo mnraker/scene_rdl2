@@ -142,258 +142,258 @@ public:
     // Frame
     //
 
-    static AttributeKey<Float> sMinFrameKey;
-    static AttributeKey<Float> sMaxFrameKey;
-    static AttributeKey<Float> sFrameKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sMinFrameKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sMaxFrameKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sFrameKey;
 
     //
     // Camera and Layer
     //
 
     // The primary RDL camera object we're rendering from.
-    static AttributeKey<SceneObject*> sCamera;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject*> sCamera;
     // Dicing RDL camera
-    static AttributeKey<SceneObject*> sDicingCamera;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject*> sDicingCamera;
     // The active RDL layer object we're rendering from.
-    static AttributeKey<SceneObject*> sLayer;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject*> sLayer;
 
     //
     // Exr Header Attributes
     //
 
-    static AttributeKey<SceneObject*> sAttrExrHeaderAttributes;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject*> sAttrExrHeaderAttributes;
 
     //
     // Image Size
     //
 
     // Canonical frame width (BEFORE applying the resolution divisor or viewport), in pixels.
-    static AttributeKey<Int> sImageWidth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sImageWidth;
     // Canonical frame height (BEFORE applying the resolution divisor or viewport), in pixels.
-    static AttributeKey<Int> sImageHeight;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sImageHeight;
     // The resolution divisor.
-    static AttributeKey<Float> sResKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sResKey;
 
     // See http://jira.anim.dreamworks.com/browse/MOONRAY-1999 for a detailed description
     // of the exact definition of aperture and region window.
-    static AttributeKey<IntVector> sApertureWindow;
-    static AttributeKey<IntVector> sRegionWindow;
+    RDL2_DSO_BUILTIN_API static AttributeKey<IntVector> sApertureWindow;
+    RDL2_DSO_BUILTIN_API static AttributeKey<IntVector> sRegionWindow;
 
     // The sub-viewport. We don't render pixels outside of this viewport.
-    static AttributeKey<IntVector> sSubViewport;
+    RDL2_DSO_BUILTIN_API static AttributeKey<IntVector> sSubViewport;
 
     //
     // Motion and Scale
     //
 
-    static AttributeKey<FloatVector> sMotionSteps;
-    static AttributeKey<Bool> sSlerpXforms;
-    static AttributeKey<Float> sFpsKey;
-    static AttributeKey<Float> sSceneScaleKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<FloatVector> sMotionSteps;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sSlerpXforms;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sFpsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sSceneScaleKey;
 
     //
     // Sampling
     //
 
-    static AttributeKey<Int> sSamplingMode;
-    static AttributeKey<Int> sMinAdaptiveSamples;
-    static AttributeKey<Int> sMaxAdaptiveSamples;
-    static AttributeKey<Float> sTargetAdaptiveError;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sSamplingMode;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMinAdaptiveSamples;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxAdaptiveSamples;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sTargetAdaptiveError;
 
-    static AttributeKey<Int> sLightSamplingMode;
-    static AttributeKey<Float> sLightSamplingQuality;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sLightSamplingMode;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sLightSamplingQuality;
 
-    static AttributeKey<Int> sPixelSamplesSqrt;     // Traditional non-adaptive sampling sample count.
-    static AttributeKey<Int> sLightSamplesSqrt;
-    static AttributeKey<Int> sBsdfSamplesSqrt;
-    static AttributeKey<Int> sBssrdfSamplesSqrt;
-    static AttributeKey<Int> sMaxDepth;
-    static AttributeKey<Int> sMaxDiffuseDepth;
-    static AttributeKey<Int> sMaxGlossyDepth;
-    static AttributeKey<Int> sMaxMirrorDepth;
-    static AttributeKey<Int> sMaxVolumeDepth;
-    static AttributeKey<Int> sMaxPresenceDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sPixelSamplesSqrt;     // Traditional non-adaptive sampling sample count.
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sLightSamplesSqrt;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sBsdfSamplesSqrt;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sBssrdfSamplesSqrt;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxDiffuseDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxGlossyDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxMirrorDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxVolumeDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxPresenceDepth;
     // Note: hair material has glossy lobes. So the max depth
     // for hair materials is actually max(sMaxGlossyDepth, sMaxHairDepth)
-    static AttributeKey<Int> sMaxHairDepth;
-    static AttributeKey<Bool> sDisableOptimizedHairSampling;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxHairDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sDisableOptimizedHairSampling;
 
     // The following is a control for max subsurface evaluations
     // after which it switches to a diffuse approximation
-    static AttributeKey<Int> sMaxSubsurfacePerPath;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxSubsurfacePerPath;
 
-    static AttributeKey<Float> sTransparencyThreshold;
-    static AttributeKey<Float> sPresenceThreshold;
-    static AttributeKey<Float> sPresenceQuality;
-    static AttributeKey<Float> sRussianRouletteThreshold;
-    static AttributeKey<Bool> sLockFrameNoise;
-    static AttributeKey<Float> sVolumeQuality;
-    static AttributeKey<Float> sVolumeShadowQuality;
-    static AttributeKey<Int> sVolumeIlluminationSamples;
-    static AttributeKey<Float> sVolumeOpacityThreshold;
-    static AttributeKey<Int> sVolumeOverlapMode;
-    static AttributeKey<Int>  sVolumeIndirectSamples;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sTransparencyThreshold;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sPresenceThreshold;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sPresenceQuality;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sRussianRouletteThreshold;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sLockFrameNoise;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sVolumeQuality;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sVolumeShadowQuality;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sVolumeIlluminationSamples;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sVolumeOpacityThreshold;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sVolumeOverlapMode;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>  sVolumeIndirectSamples;
 
     //
     // Volume Multiple Scattering coefficient
     //
-    static AttributeKey<Float> sVolumeAttenuationFactor;
-    static AttributeKey<Float> sVolumeContributionFactor;
-    static AttributeKey<Float> sVolumePhaseAttenuationFactor;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sVolumeAttenuationFactor;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sVolumeContributionFactor;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sVolumePhaseAttenuationFactor;
 
     //
     // Fireflies removal
     //
 
-    static AttributeKey<Float> sSampleClampingValue;
-    static AttributeKey<Int> sSampleClampingDepth;
-    static AttributeKey<Float> sRoughnessClampingFactor;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sSampleClampingValue;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sSampleClampingDepth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sRoughnessClampingFactor;
 
     //
     // Filtering
     //
 
-    static AttributeKey<Float> sTextureBlur;
-    static AttributeKey<Float> sPixelFilterWidth;
-    static AttributeKey<Int> sPixelFilterType;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sTextureBlur;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sPixelFilterWidth;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sPixelFilterType;
 
     //
     // Deep file output
     //
 
-    static AttributeKey<Int> sDeepFormat;
-    static AttributeKey<Float> sDeepCurvatureTolerance;
-    static AttributeKey<Float> sDeepZTolerance;
-    static AttributeKey<Int> sDeepVolCompressionRes;
-    static AttributeKey<StringVector> sDeepIDAttributeNames;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sDeepFormat;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sDeepCurvatureTolerance;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sDeepZTolerance;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sDeepVolCompressionRes;
+    RDL2_DSO_BUILTIN_API static AttributeKey<StringVector> sDeepIDAttributeNames;
 
-    static AttributeKey<String> sCryptoUVAttributeName;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sCryptoUVAttributeName;
 
     //
     // Caching
     //
 
-    static AttributeKey<Int> sTextureCacheSizeMb;
-    static AttributeKey<Int> sTextureFileHandleCount;
-    static AttributeKey<Bool> sFastGeomUpdate;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sTextureCacheSizeMb;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sTextureFileHandleCount;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sFastGeomUpdate;
 
     //
     // Checkpoint render
     //
-    static AttributeKey<Bool>   sCheckpointActive; // The toggle for checkpoint render
-    static AttributeKey<Float>  sCheckpointInterval; // Unit is minute
-    static AttributeKey<Int>    sCheckpointQualitySteps;
-    static AttributeKey<Float>  sCheckpointTimeCap; // Unit is minute
-    static AttributeKey<Int>    sCheckpointSampleCap;
-    static AttributeKey<Bool>   sCheckpointOverwrite;
-    static AttributeKey<Int>    sCheckpointMode;
-    static AttributeKey<Int>    sCheckpointStartSPP; // Samples per pixel
-    static AttributeKey<Bool>   sCheckpointBgWrite;
-    static AttributeKey<String> sCheckpointPostScript; // Post checkpoint lua script name
-    static AttributeKey<Int>    sCheckpointTotalFiles; // for quality based checkpoint mode
-    static AttributeKey<Int>    sCheckpointMaxBgCache; // for sCheckpointBgWrite = true
-    static AttributeKey<Float>  sCheckpointMaxSnapshotOverhead; // max threshold fraction of snapshot overhead
-    static AttributeKey<Float>  sCheckpointSnapshotInterval; // Unit is minute
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool>   sCheckpointActive; // The toggle for checkpoint render
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float>  sCheckpointInterval; // Unit is minute
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>    sCheckpointQualitySteps;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float>  sCheckpointTimeCap; // Unit is minute
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>    sCheckpointSampleCap;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool>   sCheckpointOverwrite;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>    sCheckpointMode;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>    sCheckpointStartSPP; // Samples per pixel
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool>   sCheckpointBgWrite;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sCheckpointPostScript; // Post checkpoint lua script name
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>    sCheckpointTotalFiles; // for quality based checkpoint mode
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>    sCheckpointMaxBgCache; // for sCheckpointBgWrite = true
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float>  sCheckpointMaxSnapshotOverhead; // max threshold fraction of snapshot overhead
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float>  sCheckpointSnapshotInterval; // Unit is minute
 
     //
     // Resume render
     //
-    static AttributeKey<Bool>   sResumableOutput;
-    static AttributeKey<Bool>   sResumeRender;
-    static AttributeKey<String> sOnResumeScript; // on resume lua script name
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool>   sResumableOutput;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool>   sResumeRender;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sOnResumeScript; // on resume lua script name
 
     //
     // Global overriding toggles
     //
 
     // The toggle for camera motion blur
-    static AttributeKey<Bool> sEnableMotionBlur;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sEnableMotionBlur;
     // The toggle for camera depth of field
-    static AttributeKey<Bool> sEnableDof;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sEnableDof;
     // The toggle for limiting the max subdivision
-    static AttributeKey<Bool> sEnableMaxGeomResolution;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sEnableMaxGeomResolution;
     // Max subdivision limit
-    static AttributeKey<Int> sMaxGeomResolution;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMaxGeomResolution;
     // The toggle for displacement map
-    static AttributeKey<Bool> sEnableDisplacement;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sEnableDisplacement;
     // The toggle for subsurface scattering
-    static AttributeKey<Bool> sEnableSSS;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sEnableSSS;
     // The toggle for shadow
-    static AttributeKey<Bool> sEnableShadowing;
-    static AttributeKey<Bool> sEnablePresenceShadows;
-    static AttributeKey<Bool> sLightsVisibleInCameraKey;
-    static AttributeKey<Bool> sPropagateVisibilityBounceType;
-    static AttributeKey<Int>  sShadowTerminatorFix;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sEnableShadowing;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sEnablePresenceShadows;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sLightsVisibleInCameraKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sPropagateVisibilityBounceType;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int>  sShadowTerminatorFix;
 
     //
     // Driver
     //
 
     // The machine ID. Machine IDs must be >= 0 and < numMachines.
-    static AttributeKey<Int> sMachineId;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sMachineId;
 
     // The number of machines in the cluster. If not rendering in a cluster, this is 1.
-    static AttributeKey<Int> sNumMachines;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sNumMachines;
 
     // Task distribution type for multi-machine context.
-    static AttributeKey<Int> sTaskDistributionType;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sTaskDistributionType;
 
     // Batch/Realime mode tile scheduling pattern.
-    static AttributeKey<Int> sBatchTileOrder;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sBatchTileOrder;
 
     // Progressive mode tile scheduling pattern.
-    static AttributeKey<Int> sProgressiveTileOrder;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sProgressiveTileOrder;
 
     // Checkpoint mode tile scheduling pattern.
-    static AttributeKey<Int> sCheckpointTileOrder;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sCheckpointTileOrder;
 
     // The output image file path.
-    static AttributeKey<String> sOutputFile;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sOutputFile;
 
     // Temporary directory
-    static AttributeKey<String> sTemporaryDirectory;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sTemporaryDirectory;
 
     // The aov to use as the primary output
     static AttributeKey<SceneObject*> sPrimaryAov;
 
     // File output logic
-    static AttributeKey<Bool> sTwoStageOutput;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sTwoStageOutput;
 
     //
     // Logging
     //
 
-    static AttributeKey<Bool> sDebugKey;
-    static AttributeKey<Bool> sInfoKey;
-    static AttributeKey<Rgb> sFatalColor;
-    static AttributeKey<Vec3f> sFatalNormal;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sDebugKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sInfoKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Rgb> sFatalColor;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec3f> sFatalNormal;
     // The statsfile file path.
-    static AttributeKey<String> sStatsFile;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sStatsFile;
 
     // Athena Data Collection
-    static AttributeKey<Bool> sAthenaDebug;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sAthenaDebug;
 
     //
     // Debug
     //
 
     // The pixel to debug, expressed in rezed / frame-viewport coordinates.
-    static AttributeKey<IntVector> sDebugPixel;
+    RDL2_DSO_BUILTIN_API static AttributeKey<IntVector> sDebugPixel;
     // The debug rays output file path.
-    static AttributeKey<String> sDebugRaysFile;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sDebugRaysFile;
     // Start and end ray to debug, inclusive.
-    static AttributeKey<IntVector> sDebugRaysPrimaryRange;
+    RDL2_DSO_BUILTIN_API static AttributeKey<IntVector> sDebugRaysPrimaryRange;
     // Start and end ray depth to debug, inclusive.
-    static AttributeKey<IntVector> sDebugRaysDepthRange;
+    RDL2_DSO_BUILTIN_API static AttributeKey<IntVector> sDebugRaysDepthRange;
 
     // Debug console
-    static AttributeKey<Int> sDebugConsole;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sDebugConsole;
 
     // Geometry validation
-    static AttributeKey<Bool> sValidateGeometry;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sValidateGeometry;
 
     // capture multiple layers of presence for cryptomatte
-    static AttributeKey<Bool> sCryptomatteMultiPresence;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sCryptomatteMultiPresence;
 };
 
 } // namespace rdl2

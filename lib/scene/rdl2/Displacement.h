@@ -53,7 +53,7 @@ public:
     }
 
     // Attributes common to all Displacement objects
-    static AttributeKey<Float> sBoundPadding;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sBoundPadding;
 };
 
 template <>

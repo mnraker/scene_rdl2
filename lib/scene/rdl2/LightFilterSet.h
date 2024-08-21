@@ -81,7 +81,7 @@ public:
     void clear();
 
 private:
-    static AttributeKey<SceneObjectVector> sLightFiltersKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sLightFiltersKey;
 };
 
 const SceneObjectVector& LightFilterSet::getLightFilters() const { return get(sLightFiltersKey); }
