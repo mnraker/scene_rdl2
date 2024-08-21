@@ -35,11 +35,23 @@ protected:
     long long mStartTime;
 };
 
-class __attribute__((aligned(64))) RecTimeLog
+#ifndef _MSC_VER
+#define __attribute_aligned(x) __attribute__((aligned(x)))
+#else
+#define __attribute_aligned(x) __declspec(align(x))
+#endif
+
+class __attribute_aligned(64) RecTimeLog
 //
 // Simple logging for time value
 //
 {
+
+protected:
+    float mAll;                 // sec
+    float mLast;                // sec
+    uint64_t mTotal;
+
 public:
     RecTimeLog() { reset(); }
     ~RecTimeLog() {}
@@ -51,10 +63,6 @@ public:
     float getAverage() const { return (mTotal)? mAll / (float)mTotal: 0; } // return sec
     uint64_t getTotal() const { return mTotal; }
 
-protected:
-    float mAll;                 // sec
-    float mLast;                // sec
-    uint64_t mTotal;
 };
 
 class RecTimeAutoInterval

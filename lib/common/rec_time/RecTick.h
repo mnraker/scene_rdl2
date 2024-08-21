@@ -5,6 +5,10 @@
 //
 #pragma once
 
+#ifdef _MSC_VER
+#include <scene_rdl2/common/platform/Platform.h>
+#endif
+
 #include "RecTime.h"
 
 #include <string>
@@ -31,6 +35,7 @@ protected:
 inline void
 RecTick::start()
 {
+#ifndef _MSC_VER
 #if defined(__aarch64__)  // TODO: actually check this
     asm volatile("mrs %0, cntvct_el0" : "=r"(mStartTick));
 
@@ -46,12 +51,18 @@ RecTick::start()
 
     mStartTick = ((uint64_t(high)) << 32) | low;
 #endif
-    
+#else
+    LARGE_INTEGER startTick;
+    QueryPerformanceCounter(&startTick);
+    mStartTick = startTick.QuadPart;
+#endif
+
 }
 
 inline uint64_t
 RecTick::end()
 {
+#ifndef _MSC_VER
 #if defined(__aarch64__)  // TODO: actually check this
     asm volatile("mrs %0, cntvct_el0" : "=r"(mEndTick));
 
@@ -68,13 +79,18 @@ RecTick::end()
 
     mEndTick = ((uint64_t(high)) << 32) | low;
 #endif
+#else
+    LARGE_INTEGER endTick;
+    QueryPerformanceCounter(&endTick);
+    mEndTick = endTick.QuadPart;
+#endif
 
     return mEndTick - mStartTick;
 }
 
 //------------------------------------------------------------------------------
 
-class __attribute__((aligned(64))) RecTickLog
+class __attribute_aligned(64) RecTickLog
 //
 // Simple logging for tick value
 //
