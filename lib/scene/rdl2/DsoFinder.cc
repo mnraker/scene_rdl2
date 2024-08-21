@@ -22,6 +22,12 @@
 namespace scene_rdl2 {
 namespace rdl2 {
 
+#ifndef _MSC_VER
+const std::string os_pathsep(":");
+#else
+const std::string os_pathsep(";");
+#endif
+
 using util::Args;
 
 #if __cplusplus < 201703L
@@ -87,7 +93,7 @@ DsoFinder::guessDsoPath()
 #else
     dirent** nameList;
     
-    size_t found = pathEnv.find(':');
+    size_t found = pathEnv.find(os_pathsep);
     int numFound;
     std::string path;
     if (found == std::string::npos) { // single path
@@ -102,7 +108,7 @@ DsoFinder::guessDsoPath()
                 break;
             }
             counter = found + 1;
-            found = pathEnv.find(':', found + 1);
+            found = pathEnv.find(os_pathsep, found + 1);
         }
         
         if (numFound <= 0) { // Haven't found raas_render yet
@@ -125,7 +131,6 @@ DsoFinder::guessDsoPath()
         free(nameList[numFound]);
     }*/
     free(nameList);
-
     return dsoPath;
 #endif
 }
@@ -135,14 +140,14 @@ std::string DsoFinder::find() {
     std::string dsoPathString = "."; // Search '.' path first
     if (const char* const dsoPathEnvVar = util::getenv<const char*>("RDL2_DSO_PATH")) {
         // append dso path as sourced from RDL2_DSO_PATH
-        dsoPathString += ":" + std::string(dsoPathEnvVar);
+        dsoPathString += os_pathsep + std::string(dsoPathEnvVar);
     }
     
     // finally, guess dso path based on location of raas_render
     std::string guessedDsoPath = guessDsoPath();
     if (!guessedDsoPath.empty()) {
         // append dso path as sourced from location of raas_render executable
-        dsoPathString += ":" + guessedDsoPath;   
+        dsoPathString += os_pathsep + guessedDsoPath;   
     }
     
     return dsoPathString;
@@ -175,7 +180,7 @@ std::string DsoFinder::parseDsoPath(int argc, char* argv[]) {
     
     if (!dsoPath.empty()) {
         // prepend dso path as sourced from command line
-        return dsoPath + ":" + findPath; 
+        return dsoPath + os_pathsep + findPath; 
     }
     
     return findPath; 
