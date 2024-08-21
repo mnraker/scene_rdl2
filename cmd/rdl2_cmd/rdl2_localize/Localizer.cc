@@ -20,7 +20,12 @@
 #include <map>
 #include <string>
 #include <stdlib.h>
-#include <unistd.h>
+#ifndef _MSC_VER
+    #include <unistd.h>
+#else
+    #define access _access
+    #define F_OK 0
+#endif
 #include <vector>
 
 using namespace scene_rdl2;
