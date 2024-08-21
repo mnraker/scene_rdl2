@@ -47,11 +47,20 @@ SceneRdl2_cxx_compile_features(${component})
 SceneRdl2_cxx_compile_options(${component})
 SceneRdl2_link_options(${component})
 
-# Disable auto_ptr deprecated warning from old log4cplus
-target_compile_options(${component}
-    PRIVATE
-        -Wno-deprecated-declarations
-    )
+if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    target_compile_definitions(${component}
+        PUBLIC
+            UNICODE             # MSVC for log4cplus unicode support
+        PRIVATE
+            _HAS_AUTO_PTR_ETC=1 # For older log4cplus
+        )
+else()
+    # Disable auto_ptr deprecated warning from old log4cplus
+    target_compile_options(${component}
+        PRIVATE
+            -Wno-deprecated-declarations
+        )
+endif()
 
 # -------------------------------------
 # Install the target and the export set

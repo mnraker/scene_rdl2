@@ -20,11 +20,18 @@ set(luacSources
     ${CMAKE_CURRENT_SOURCE_DIR}/rdlalib/transforms.lua)
 set(luaSources
     ${CMAKE_CURRENT_SOURCE_DIR}/rdlalib/bin2cc.lua)
+
 add_custom_command(
-    COMMAND ${LUA_BIN_LUAC} -o - ${luacSources} | ${LUA_BIN_LUA} ${luaSources} > rdlalib.cc
+    COMMAND ${LUA_BIN_LUAC} -o rdlalib.out ${luacSources}
     DEPENDS ${luacSources} ${luaSources}
+    OUTPUT rdlalib.out
+    COMMENT "Generates rdlalib.out from lua souce")
+
+add_custom_command(
+    COMMAND ${LUA_BIN_LUA} ${luaSources}
+    DEPENDS rdlalib.out
     OUTPUT rdlalib.cc
-    COMMENT "Generates rdlalib.cc from lua souce")
+    COMMENT "Generates rdlalib.cc from rdlalib.out + bin2cc.lua")
 
 # Add a target that executes the above custom command when built
 add_custom_target(rdlalib DEPENDS rdlalib.cc)
@@ -188,7 +195,18 @@ SceneRdl2_link_options(scene_rdl2_tmp)
 target_compile_definitions(scene_rdl2_tmp
     PUBLIC
         __cdecl=                                # Used in Types.h
+    PRIVATE
+        RDL2_DSO_BUILTIN_EXPORTS
 )
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(scene_rdl2_tmp
+        PRIVATE
+            /wd4293 # '>>': shift count negative or too big, undefined behavior
+            /wd4717 # 'scene_rdl2::rdl2::A0x8b9ed752::`anonymous namespace'::Undef::operator==': recursive on all control paths, function will cause runtime stack overflow
+    )
+endif()
+
 # =============================================================
 
 
@@ -210,6 +228,13 @@ SceneRdl2_cxx_compile_definitions(rdl2_ispc_util)
 SceneRdl2_cxx_compile_features(rdl2_ispc_util)
 SceneRdl2_cxx_compile_options(rdl2_ispc_util)
 SceneRdl2_link_options(rdl2_ispc_util)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(rdl2_ispc_util
+        PRIVATE
+            /wd4477 # 'printf' : format string '%lu' requires an argument of type 'unsigned long', but variadic argument 1 has type 'unsigned __int64'
+    )
+endif()
 
 # =============================================================
 
@@ -246,12 +271,28 @@ separate_arguments(rdl2_json_exporter_args)
 # =============================================================
 # Defines a custom command that when run generates the json files
 # needed for third party apps
-add_custom_command(OUTPUT ${class_outputs}
-    POST_BUILD
-    COMMAND rdl2_json_exporter ${rdl2_json_exporter_args}
-    DEPENDS rdl2_json_exporter
-    VERBATIM
-)
+if(IsWindowsPlatform)
+    # To run json_exporter at build-time, we need to make sure that all runtime
+    # libraries are available to dynamically link with
+    list(APPEND _env_list 
+        ${CMAKE_PREFIX_PATH}/bin
+        ${CMAKE_PREFIX_PATH}/lib
+        $ENV{BUILD_DIR}/bin $ENV{BUILD_DIR}/lib $ENV{DEPS_ROOT}/bin $ENV{DEPS_ROOT}/lib
+    )
+    list(JOIN _env_list ";" _env)
+    add_custom_command(OUTPUT ${class_outputs}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E env "PATH=${_env}" "$<TARGET_FILE:rdl2_json_exporter>" ${rdl2_json_exporter_args}
+        DEPENDS rdl2_json_exporter
+    )
+else()
+    add_custom_command(OUTPUT ${class_outputs}
+        POST_BUILD
+        COMMAND rdl2_json_exporter ${rdl2_json_exporter_args}
+        DEPENDS rdl2_json_exporter
+        VERBATIM
+    )
+endif()
 
 # Add a target that executes the above custom command when built
 add_custom_target(coredata_files ALL DEPENDS ${class_outputs})

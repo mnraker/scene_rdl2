@@ -29,4 +29,13 @@ function(SceneRdl2_cxx_compile_definitions target)
             _LIBCPP_ENABLE_CXX17_REMOVED_RANDOM_SHUFFLE=1 # Clang - ensure std::random_shuffle is available
             _LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
     )
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        target_compile_definitions(${target}
+            PRIVATE
+                BOOST_ALL_DYN_LINK
+                BOOST_ALL_NO_LIB
+                _USE_MATH_DEFINES
+                NOMINMAX
+        )
+    endif()
 endfunction()

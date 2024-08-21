@@ -27,3 +27,13 @@ SceneRdl2_link_options(${target})
 
 install(TARGETS ${target}
     RUNTIME DESTINATION bin)
+
+# rdl2_json_exporter runs during the build and the runtime DLLs need to be next to it
+# for windows to recognise and load them
+if(IsWindowsPlatform)
+    target_link_options(${target} PRIVATE /SUBSYSTEM:CONSOLE)
+    add_custom_command(TARGET ${target} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${target}> $<TARGET_RUNTIME_DLLS:${target}>
+    COMMAND_EXPAND_LISTS
+    )
+endif()

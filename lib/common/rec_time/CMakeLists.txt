@@ -29,6 +29,11 @@ target_include_directories(${component}
         $<INSTALL_INTERFACE:include>
 )
 
+target_include_directories(${component} SYSTEM
+    PRIVATE
+        ${Log4cplus_INCLUDE_DIRS}
+)
+
 # If at Dreamworks add a SConscript stub file so others can use this library.
 SConscript_Stub(${component})
 
