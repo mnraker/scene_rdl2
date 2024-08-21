@@ -1,6 +1,7 @@
 // Copyright 2023-2024 DreamWorks Animation LLC
 // SPDX-License-Identifier: Apache-2.0
 
+#include <scene_rdl2/common/platform/Endian.h>
 
 #include "BinaryWriter.h"
 
@@ -20,13 +21,6 @@
 #include <sstream>
 #include <string>
 #include <stdint.h>
-
-#ifdef __APPLE__
-#include <libkern/OSByteOrder.h>
-#define htobe64(x) OSSwapHostToBigInt64(x)
-#else
-#include <endian.h>
-#endif
 
 namespace scene_rdl2 {
 namespace rdl2 {
