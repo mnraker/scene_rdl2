@@ -226,7 +226,7 @@ public:
     inline void deqVLUInt(unsigned int &ui);
     inline void deqVLLong(long &l);
     inline void deqVLULong(unsigned long &ul);
-    inline void deqVLSizeT(size_t &t) { deqVLULong(static_cast<unsigned long &>(t)); }
+    inline void deqVLSizeT(size_t &t) { deqVLULong(reinterpret_cast<unsigned long &>(t)); }
     inline void deqVLIntVector(IntVector &vec);
     inline void deqVLLongVector(LongVector &vec);
 
