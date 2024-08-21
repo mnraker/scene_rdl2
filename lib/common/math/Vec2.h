@@ -52,7 +52,7 @@ namespace math {
     __forceinline explicit Vec2( const T& a             ) : x(a), y(a) {}
     // MoonRay: added underscores to fix compile warning
     __forceinline explicit Vec2( const T& _x, const T& _y ) : x(_x), y(_y) {}
-    __forceinline explicit Vec2( const T* const a, const ssize_t stride = 1 ) : x(a[0]), y(a[stride]) {}
+    __forceinline explicit Vec2( const T* a, const ssize_t stride = 1 ) : x(a[0]), y(a[stride]) {}
 
     ////////////////////////////////////////////////////////////////////////////////
     /// Constants

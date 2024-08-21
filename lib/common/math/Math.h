@@ -89,7 +89,6 @@ namespace math {
 */
 // Intel: end *****
 
-#if !defined(__WIN32__)
 // MoonRay: added exp2(), log2() and sincos()
   __forceinline float abs  ( const float x ) { return ::fabsf(x); }
   __forceinline float acos ( const float x ) { return dw_acos (x); }
@@ -108,6 +107,8 @@ namespace math {
   __forceinline float sin  ( const float x ) { return ::sinf  (x); }
 #if defined(__APPLE__)
   __forceinline void  sincos( const float a, float *y, float *x ) { __sincosf(a, y, x); }
+#elif defined(_MSC_VER)
+  __forceinline void  sincos( const float a, float *y, float *x ) { *y = ::sinf(a); *x = ::cosf(a); }
 #else
   __forceinline void  sincos( const float a, float *y, float *x ) { return ::sincosf(a, y, x); }
 #endif
@@ -117,7 +118,6 @@ namespace math {
   __forceinline float tanh ( const float x ) { return ::tanhf (x); }
   __forceinline float floor( const float x ) { return ::floorf (x); }
   __forceinline float ceil ( const float x ) { return ::ceilf (x); }
-#endif
 
 // MoonRay: added exp2(), log2() and sincos()
   __forceinline double abs  ( const double x ) { return ::fabs(x); }
@@ -139,6 +139,8 @@ namespace math {
   __forceinline double sin  ( const double x ) { return ::sin  (x); }
 #if defined(__APPLE__)
   __forceinline void  sincos( const double a, double *y, double *x ) { __sincos(a, y, x); }
+#elif defined(_MSC_VER)
+  __forceinline void  sincos( const double a, double *y, double *x ) { *y = ::sin(a); *x = ::cos(a); }
 #else
   __forceinline void   sincos( const double a, double *y, double *x ) { ::sincos(a, y, x); }
 #endif
