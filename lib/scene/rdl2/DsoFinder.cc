@@ -9,14 +9,22 @@
 
 #include <cstdlib>
 #include <vector>
-#include <dirent.h>
-#include <libgen.h>
+
+#if __cplusplus >= 201703L
+    #include <filesystem>
+    namespace fs = std::filesystem;
+    const std::string g_raasRender("raas_render");
+#else
+    #include <dirent.h>
+    #include <libgen.h>
+#endif
 
 namespace scene_rdl2 {
 namespace rdl2 {
 
 using util::Args;
 
+#if __cplusplus < 201703L
 int isMatching(const dirent* entry) {
     std::string name = "raas_render";
     if (name == std::string(entry->d_name)) {
@@ -25,18 +33,59 @@ int isMatching(const dirent* entry) {
     
     return 0;
 }
+#endif
 
 std::string
 DsoFinder::guessDsoPath()
 {
     std::string dsoPath = "";
-    dirent** nameList;
-    
+
     // First, search PATH for raas_render executable
     const std::string pathEnv = util::getenv<std::string>("PATH");
     if (pathEnv.empty()) {
         return "";
     }
+#if __cplusplus >= 201703L
+    size_t found = pathEnv.find(os_pathsep);
+    fs::path path;
+    if (found == std::string::npos) { // single path
+        path = fs::path(pathEnv).make_preferred();
+
+        if (fs::exists(path)) {
+            for (auto const& dirEntry : std::filesystem::directory_iterator(path)) {
+                if (dirEntry.path().filename().string() == g_raasRender) {
+                    break;
+                }
+            }
+        }
+    } else {
+        int counter = 0;
+        bool pathFound = false;
+        while (found != std::string::npos) {
+            path = fs::path(pathEnv.substr(counter, found - counter)).make_preferred();
+            if (fs::exists(path)) {
+                for ( const auto & dirEntry : std::filesystem::directory_iterator(path)) {
+                    std::string file = dirEntry.path().stem().string();
+                    if (file == g_raasRender) {
+                        pathFound = true;
+                        break;
+                    }
+                }
+            }
+            if (pathFound) {
+                break;
+            }
+            counter = found + 1;
+            found = pathEnv.find(os_pathsep, found + 1);
+        }
+    }
+
+    if (!path.empty()) {
+        dsoPath = fs::path(fs::absolute(path.parent_path()) / "rdl2dso").make_preferred().string();
+    }
+    return dsoPath;
+#else
+    dirent** nameList;
     
     size_t found = pathEnv.find(':');
     int numFound;
@@ -78,6 +127,7 @@ DsoFinder::guessDsoPath()
     free(nameList);
 
     return dsoPath;
+#endif
 }
 
 std::string DsoFinder::find() {

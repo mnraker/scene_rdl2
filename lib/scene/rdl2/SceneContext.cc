@@ -49,6 +49,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#if __cplusplus >= 201703L
+    #include <filesystem>
+    namespace fs = std::filesystem;
+#endif
+
 namespace scene_rdl2 {
 
 using logging::Logger;
@@ -725,7 +730,32 @@ SceneContext::loadAllSceneClasses()
         // Grab the next path entry.
         std::size_t colonPos = remaining.find_first_of(':');
         std::string directory = remaining.substr(0, colonPos);
+#if __cplusplus >= 201703L
+        fs::path p(directory);
+        if (fs::exists(p)) {
+            for (auto const& dirEntry : std::filesystem::directory_iterator(p)) {
+                // If the file is a valid DSO, then create a SceneClass from it.
+                if (Dso::isValidDso(dirEntry.path().string(), mProxyModeEnabled)) {
+                    // Class name is the file name without ".so" (or
+                    // ".so.proxy" in proxy mode).
+                    std::string className;
+                    if (mProxyModeEnabled) {
+                        className = dirEntry.path().stem().stem().string();
+                    } else {
+                        className = dirEntry.path().stem().string();
+                    }
 
+                    try {
+                        createSceneClass(className);
+                    } catch (...) {
+                        // Swallow exceptions here. If something was wrong with
+                        // the declare() function, just move on to the next
+                        // SceneClass.
+                    }
+                }
+            }
+        }
+#else
         // Grab the contents of each directory.
         DIR* directoryPtr = opendir(directory.c_str());
         if (directoryPtr != nullptr) {
@@ -755,6 +785,7 @@ SceneContext::loadAllSceneClasses()
             }
         }
         closedir(directoryPtr);
+#endif
 
         // Move to the next path entry.
         if (colonPos != std::string::npos) {

@@ -4,7 +4,11 @@
 
 #include <scene_rdl2/common/rec_time/RecTime.h>
 
-#include <unistd.h>
+#if __cplusplus >= 201703L
+    #include <chrono>
+#else
+    #include <unistd.h>
+#endif
 
 // This directive should not commented out for the release version.
 // This is only used for local debugging purposes.
@@ -98,7 +102,11 @@ TestThreadPoolExecutor::watcherThreadMain(const float maxTestDurationSec)
                       << " duration:" << maxTestDurationSec << " sec\n";
             exit(1);
         }
+#if __cplusplus >= 201703L
+        std::this_thread::sleep_for(std::chrono::microseconds(10000));
+#else
         usleep(10000);
+#endif
     }
 
     std::cerr << ">> Watcher thread shutdown <<\n";

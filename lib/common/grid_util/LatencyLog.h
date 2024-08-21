@@ -19,7 +19,13 @@
 #include <string>
 #include <vector>
 
+#ifndef _MSC_VER
 #include <sys/time.h>
+#endif
+
+#if __cplusplus >= 201703L
+#include <chrono>
+#endif
 
 //
 // We should always use variable length coding.
@@ -196,6 +202,18 @@ protected:
 finline uint64_t
 LatencyItem::getCurrentMicroSec()
 {
+#if __cplusplus >= 201703L
+    const auto tnow = std::chrono::high_resolution_clock::now().time_since_epoch();
+    const auto cTime = std::chrono::duration_cast<std::chrono::microseconds>(tnow);
+    uint64_t microSec = (uint64_t)(int64_t)cTime.count();
+
+    if (LatencyClockOffset::getInstance().isPositive()) {
+        microSec += LatencyClockOffset::getInstance().getAbsOffsetMicroSec();
+    } else {
+        microSec -= LatencyClockOffset::getInstance().getAbsOffsetMicroSec();
+    }
+    return microSec;
+#else
     struct timeval tv;
     gettimeofday(&tv, 0x0);
     uint64_t microSec = static_cast<uint64_t>(tv.tv_sec) * 1000 * 1000 + static_cast<uint64_t>(tv.tv_usec);
@@ -205,6 +223,7 @@ LatencyItem::getCurrentMicroSec()
         microSec -= LatencyClockOffset::getInstance().getAbsOffsetMicroSec();
     }
     return microSec;
+#endif
 }
 
 finline uint64_t

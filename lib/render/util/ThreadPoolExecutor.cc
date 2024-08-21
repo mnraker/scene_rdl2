@@ -9,7 +9,11 @@
 #include <iostream>
 #include <pthread.h> // pthread_setaffinity_np
 #include <sstream>
-#include <unistd.h> // usleep
+#if __cplusplus >= 201703L
+    #include <chrono>
+#else
+    #include <unistd.h> // usleep
+#endif
 
 //#define DEBUG_MSG_THREAD
 //#define DEBUG_MSG_THREAD_CPUAFFINITY
@@ -325,10 +329,14 @@ ThreadPoolExecutor::testBootShutdown()
                 // This simulates MoonRay's MCRT thread boot logic
                 ++bootedThreadTotal;
                 while (bootedThreadTotal < threadTotal) {
+#if __cplusplus >= 201703L
+                    std::this_thread::sleep_for(std::chrono::nanoseconds(1000)); // yield CPU resources
+#else
                     struct timespec tm;
                     tm.tv_sec = 0;
                     tm.tv_nsec = 1000; // 0.001ms
                     nanosleep(&tm, NULL); // yield CPU resources
+#endif
                 }
 
                 sum += threadId;

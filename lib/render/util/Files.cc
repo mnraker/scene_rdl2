@@ -34,6 +34,11 @@
 #endif
 #include <unistd.h>
 
+#if __cplusplus >= 201703L
+    #include <filesystem>
+    namespace fs = std::filesystem;
+#endif
+
 namespace scene_rdl2 {
 namespace util {
 
@@ -49,12 +54,18 @@ struct FreeDeleter
 std::pair<std::string, std::string>
 splitPath(const std::string& filePath)
 {
+#if __cplusplus >= 201703L
+    fs::path p(filePath);
+    std::string directory(p.parent_path().string());
+    std::string filename(p.filename().string());
+#else
     const char* path = filePath.c_str();
     std::unique_ptr<char, FreeDeleter> dirStr(strdup(path));
     std::unique_ptr<char, FreeDeleter> baseStr(strdup(path));
 
     std::string directory(dirname(dirStr.get()));
     std::string filename(basename(baseStr.get()));
+#endif
 
     return std::make_pair(std::move(directory), std::move(filename));
 }
