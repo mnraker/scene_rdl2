@@ -120,7 +120,7 @@ getBindingTransitiveClosureImpl(T * parentObj, SET & result)
 {
     result.insert(parentObj);
 
-    uint i = 0;
+    uint32_t i = 0;
     const SceneClass& sc = parentObj->getSceneClass();
     for (auto it = sc.beginAttributes(); it != sc.endAttributes(); ++it, ++i) {
 

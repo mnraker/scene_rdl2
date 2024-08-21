@@ -16,7 +16,11 @@ namespace scene_rdl2 {
 namespace rdl2 {
 
 static const std::string sRaasRender("raas_render");
+#ifndef _MSC_VER
 static const std::string sOsPathSep(":");
+#else
+static const std::string sOsPathSep(";");
+#endif
 
 using util::Args;
 

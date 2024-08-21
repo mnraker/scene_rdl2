@@ -42,12 +42,14 @@
 #include <string>
 #include <vector>
 
-#include <dirent.h>
 #include <errno.h>
-#include <libgen.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
+#ifndef _MSC_VER
+    #include <dirent.h>
+    #include <libgen.h>
+    #include <unistd.h>
+#endif
 
 #include <filesystem>
 
@@ -57,6 +59,12 @@ using logging::Logger;
 namespace rdl2 {
 
 namespace {
+
+#ifndef _MSC_VER
+static const std::string sOsPathSep(":");
+#else
+static const std::string sOsPathSep(";");
+#endif
 
 void
 verifyMatchingSceneClass(const std::string& className, const SceneObject* obj)
@@ -725,7 +733,7 @@ SceneContext::loadAllSceneClasses()
     std::string remaining(getDsoPath());
     while (!remaining.empty()) {
         // Grab the next path entry.
-        std::size_t colonPos = remaining.find_first_of(':');
+        std::size_t colonPos = remaining.find_first_of(sOsPathSep);
         std::string directory = remaining.substr(0, colonPos);
         std::filesystem::path p(directory);
         if (std::filesystem::exists(p)) {

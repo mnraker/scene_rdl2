@@ -20,10 +20,71 @@
 #include <memory>
 #include <sstream>
 #include <string>
-#include <dlfcn.h>
-#include <libgen.h>
-#include <unistd.h>
+
+#ifndef _MSC_VER
+    #include <dlfcn.h>
+    #include <unistd.h>
+#endif
+
 #include <filesystem>
+
+namespace {
+#ifdef __WIN32__
+
+typedef HMODULE DynamicLibrary;
+
+__forceinline std::string __dlerror()
+{
+    char *pMsgBuf;
+    DWORD error = GetLastError();
+    if(error != NO_ERROR)
+    {
+        FormatMessageA(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER |
+            FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            error,
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            reinterpret_cast<LPSTR>(&pMsgBuf),
+            0, NULL);
+        std::string errorStr = pMsgBuf;
+        LocalFree(pMsgBuf);
+        return std::move(errorStr);
+    }
+    return std::string();
+}
+
+#define dynamic_library_open(path, rtld) LoadLibraryA(path)
+#define dynamic_library_close(lib) FreeLibrary(lib)
+#define dynamic_library_find(lib, symbol) GetProcAddress(lib, symbol)
+#define dynamic_library_error() __dlerror()
+#define dynamic_library_clearerror() SetLastError(NO_ERROR)
+
+#else
+
+#include <dlfcn.h>
+
+__forceinline std::string __dlerror()
+{
+    const char *error = dlerror();
+    if(error)
+    {
+        return std::move(std::string(error));
+    }
+    return std::string();
+}
+
+typedef void *DynamicLibrary;
+
+#define dynamic_library_open(path, rtld) dlopen(path, rtld)
+#define dynamic_library_close(lib) dlclose(lib)
+#define dynamic_library_find(lib, symbol) dlsym(lib, symbol)
+#define dynamic_library_error() __dlerror()
+#define dynamic_library_clearerror() dlerror()
+
+#endif
+}
 
 namespace scene_rdl2 {
 namespace rdl2 {
@@ -96,13 +157,13 @@ Dso::Dso(const std::string& className, const std::string& searchPath, bool proxy
     }
 
     // Attempt to open the DSO.
-    mHandle = dlopen(mFilePath.c_str(), RTLD_LAZY);
+    mHandle = (void*)dynamic_library_open(mFilePath.c_str(), RTLD_LAZY);
     if (!mHandle) {
         std::stringstream errMsg;
         errMsg << "Found RDL2 DSO '" << mFilePath << "', but failed to"
             " dlopen() it";
-        char* error = dlerror();
-        if (error) {
+        std::string error = dynamic_library_error();
+        if (!error.empty()) {
             errMsg << ": " << error;
         } else {
             errMsg << ".";
@@ -114,7 +175,7 @@ Dso::Dso(const std::string& className, const std::string& searchPath, bool proxy
 Dso::~Dso()
 {
     if (mHandle) {
-        dlclose(mHandle);
+        dynamic_library_close((DynamicLibrary)mHandle);
     }
 }
 
@@ -127,19 +188,19 @@ Dso::getDeclare()
     }
 
     // Clear errors.
-    dlerror();
+    dynamic_library_clearerror();
 
     // Attempt to load the rdl_declare symbol.
     MNRY_ASSERT(mHandle, "Tried to load symbol from bad DSO handle.");
-    void* declareSymbol = dlsym(mHandle, "rdl2_declare");
+    void* declareSymbol = dynamic_library_find((DynamicLibrary)mHandle, "rdl2_declare");
     if (!declareSymbol) {
         // Technically null symbols are valid, but a null function pointer
         // is useless to us, so that's really a failure case, too.
         std::stringstream errMsg;
         errMsg << "Failed to load symbol 'rdl2_declare' from RDL2 DSO '" <<
             mFilePath << "'";
-        char* error = dlerror();
-        if (error) {
+        std::string error = dynamic_library_error();
+        if (!error.empty()) {
             errMsg << ": " << error;
         } else {
             errMsg << ".";
@@ -162,19 +223,19 @@ Dso::getCreate()
     }
 
     // Clear errors.
-    dlerror();
+    dynamic_library_clearerror();
 
     // Attempt to load the rdl_create symbol.
     MNRY_ASSERT(mHandle, "Tried to load symbol from bad DSO handle.");
-    void* createSymbol = dlsym(mHandle, "rdl2_create");
+    void* createSymbol = dynamic_library_find((DynamicLibrary)mHandle, "rdl2_create");
     if (!createSymbol) {
         // Technically null symbols are valid, but a null function pointer
         // is useless to us, so that's really a failure case, too.
         std::stringstream errMsg;
         errMsg << "Failed to load symbol 'rdl2_create' from RDL2 DSO '" <<
             mFilePath << "'";
-        char* error = dlerror();
-        if (error) {
+        std::string error = dynamic_library_error();
+        if (!error.empty()) {
             errMsg << ": " << error;
         } else {
             errMsg << ".";
@@ -197,19 +258,19 @@ Dso::getDestroy()
     }
 
     // Clear errors.
-    dlerror();
+    dynamic_library_clearerror();
 
     // Attempt to load the rdl_destroy symbol.
     MNRY_ASSERT(mHandle, "Tried to load symbol from bad DSO handle.");
-    void* destroySymbol = dlsym(mHandle, "rdl2_destroy");
+    void* destroySymbol = dynamic_library_find((DynamicLibrary)mHandle, "rdl2_destroy");
     if (!destroySymbol) {
         // Technically null symbols are valid, but a null function pointer
         // is useless to us, so that's really a failure case, too.
         std::stringstream errMsg;
         errMsg << "Failed to load symbol 'rdl2_destroy' from RDL2 DSO '" <<
             mFilePath << "'";
-        char* error = dlerror();
-        if (error) {
+        std::string error = dynamic_library_error();
+        if (!error.empty()) {
             errMsg << ": " << error;
         } else {
             errMsg << ".";
