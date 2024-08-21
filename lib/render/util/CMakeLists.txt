@@ -46,6 +46,7 @@ set_property(TARGET ${component}
         BitUtils.isph
         BlockAllocatorCheck.h
         Files.h
+        FloatingPointExceptionsRAII.h
         GetEnv.h
         GUID.h
         IndexableArray.h

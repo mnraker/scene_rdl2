@@ -9,8 +9,16 @@
 #include <ctime>       // std::time(), std::localtime(), std::mktime()
 #include <sstream>
 #include <string>
+#ifndef _MSC_VER
 #include <sys/time.h>  // gettimeofday()
+#else
+#include <scene_rdl2/common/platform/Endian.h> // winsock2 has timeval
+#endif
 #include <time.h>      // time_t
+
+#if __cplusplus >= 201703L
+#include <chrono>
+#endif
 
 namespace scene_rdl2 {
 namespace time_util {
@@ -25,7 +33,7 @@ inline
 std::string
 timeStr(const struct timeval &tv, bool usec = true)
 {
-    struct tm *time_st = localtime(&tv.tv_sec);
+    struct tm *time_st = localtime((const time_t*)&tv.tv_sec);
 
     static const char *month[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     static const char *wday[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
@@ -74,9 +82,21 @@ inline
 struct timeval
 getCurrentTime()
 {
+#if __cplusplus >= 201703L
+    struct timeval tv;
+    auto now = std::chrono::system_clock::now();
+    auto s = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
+    auto us = std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch());
+    uint64_t tv_sec = s.count();
+    uint64_t tv_usec = us.count() - tv_sec * 1000 * 1000;
+    tv.tv_sec = static_cast<long>(tv_sec);
+    tv.tv_usec = static_cast<long>(tv_usec);
+    return tv;
+#else
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return tv;
+#endif
 }
 
 inline

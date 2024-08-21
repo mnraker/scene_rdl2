@@ -16,6 +16,7 @@ ProcCpuAffinity::bindAffinity(std::string& msg)
 // Return false if bind affinity failed and return error messages to the msg(string).
 //
 {
+#ifndef _MSC_VER
     if (mMask.isEmpty()) {
         return true; // early exit : no CPU-affinity control
     }
@@ -32,6 +33,7 @@ ProcCpuAffinity::bindAffinity(std::string& msg)
     std::ostringstream ostr;
     ostr << "pid:" << pid << ' ' << mMask.showMask();
     msg = ostr.str();
+#endif
 
     return true;
 }
@@ -39,11 +41,16 @@ ProcCpuAffinity::bindAffinity(std::string& msg)
 bool
 ProcCpuAffinity::getAffinity(std::string& errorMsg)
 {
+#ifdef _MSC_VER
+    return true;
+#else
     return getAffinity(getpid(), errorMsg);
+#endif
 }
 
 //------------------------------------------------------------------------------------------
 
+#ifndef _MSC_VER
 bool
 ProcCpuAffinity::setAffinity(pid_t pid, std::string& errorMsg)
 {
@@ -67,5 +74,6 @@ ProcCpuAffinity::getAffinity(pid_t pid, std::string& errorMsg)
     }
     return true;
 }
+#endif
 
 } // namespace scene_rdl2

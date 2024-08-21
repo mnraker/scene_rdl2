@@ -6,7 +6,11 @@
 
 #include <string>
 #include <utility>
+#ifdef _MSC_VER
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 
 namespace scene_rdl2 {
 namespace util {
@@ -30,7 +34,11 @@ struct FileDescriptorGuard
 
     ~FileDescriptorGuard()
     {
+#ifndef _MSC_VER
         close(fd);
+#else
+        _close(fd);
+#endif
     }
 
     const int fd;

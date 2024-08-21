@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 #pragma once
 
+#ifndef _MSC_VER
 #include <sched.h> // cpu_set_t
+#endif
 #include <string>
 
 namespace scene_rdl2 {
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(_MSC_VER)
 #define CPU_ZERO(a)
 #define CPU_SET(a, b)
 #define CPU_EQUAL(a,b) false

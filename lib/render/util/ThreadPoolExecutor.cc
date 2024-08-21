@@ -7,8 +7,10 @@
 #include <scene_rdl2/common/except/exceptions.h>
 
 #include <iostream>
-#include <pthread.h> // pthread_setaffinity_np
 #include <sstream>
+#ifndef _MSC_VER
+    #include <pthread.h> // pthread_setaffinity_np
+#endif
 #if __cplusplus >= 201703L
     #include <chrono>
 #else
@@ -161,7 +163,7 @@ ThreadExecutor::pinThreadToCpu()
 // might throw except::RuntimeError when it fails
 //
 {
-#ifndef PLATFORM_APPLE
+#if defined(PLATFORM_LINUX)
     if (mPinCpuId == ~static_cast<int>(0)) return; // no cpu affinity
 
     auto showError = [&](const std::string& funcName, const bool flag) {
@@ -209,7 +211,7 @@ ThreadExecutor::pinThreadToCpu()
         std::cerr << ostr.str();
     }
 #   endif // end DEBUG_MSG_THREAD_CPUAFFINITY
-#endif // end ifndef PLATFORM_APPLE
+#endif // end if defined(PLATFORM_LINUX)
 }
 
 //------------------------------------------------------------------------------------------
