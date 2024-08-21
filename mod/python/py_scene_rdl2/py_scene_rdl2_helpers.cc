@@ -438,13 +438,13 @@ internal_setVecAttrValue(scene_rdl2::rdl2::SceneObject& sceneObject,
     T value { };
 
     // Extract value from boost::python::object
-    if (PyList_CheckExact(pyValue.ptr()) == true) {
+    if ((bool)PyList_CheckExact(pyValue.ptr()) == true) {
         bp::list pyList = bp::extract<bp::list>(pyValue);
         for (std::size_t idx = 0; idx < T_size; ++idx) {
             value[idx] = bp::extract<typename T::Scalar>(pyList[idx]);
         }
     }
-    else if (PyTuple_CheckExact(pyValue.ptr()) == true) {
+    else if ((bool)PyTuple_CheckExact(pyValue.ptr()) == true) {
         bp::tuple pyTuple = bp::extract<bp::tuple>(pyValue);
         for (std::size_t idx = 0; idx < T_size; ++idx) {
             value[idx] = bp::extract<typename T::Scalar>(pyTuple[idx]);
@@ -485,7 +485,7 @@ internal_setMatrixAttrValue(scene_rdl2::rdl2::SceneObject& sceneObject,
     T value { };
 
     // Extract value from boost::python::object
-    if (PyList_CheckExact(pyValue.ptr()) == true) {
+    if ((bool)PyList_CheckExact(pyValue.ptr()) == true) {
         bp::list pyList = bp::extract<bp::list>(pyValue);
         for (std::size_t row = 0, idx = 0; row < dimension; ++row) {
             for (std::size_t col = 0; col < dimension; ++col) {
@@ -495,7 +495,7 @@ internal_setMatrixAttrValue(scene_rdl2::rdl2::SceneObject& sceneObject,
             }
         }
     }
-    else if (PyTuple_CheckExact(pyValue.ptr()) == true) {
+    else if ((bool)PyTuple_CheckExact(pyValue.ptr()) == true) {
         bp::tuple pyTuple = bp::extract<bp::tuple>(pyValue);
         for (std::size_t row = 0, idx = 0; row < dimension; ++row) {
             for (std::size_t col = 0; col < dimension; ++col) {
@@ -556,11 +556,11 @@ internal_setSceneObjectVectorAttrValue(scene_rdl2::rdl2::SceneObject& sceneObjec
     std::vector<scene_rdl2::rdl2::SceneObject*> value;
 
     // Extract value from boost::python::object
-    if (PyList_CheckExact(pyValue.ptr()) == true) {
+    if ((bool)PyList_CheckExact(pyValue.ptr()) == true) {
         bp::list pyList = bp::extract<bp::list>(pyValue);
         value = conversions::PySceneObjectContainerToStdVector(pyList);
     }
-    else if (PyTuple_CheckExact(pyValue.ptr()) == true) {
+    else if ((bool)PyTuple_CheckExact(pyValue.ptr()) == true) {
         bp::tuple pyTuple = bp::extract<bp::tuple>(pyValue);
         value = conversions::PySceneObjectContainerToStdVector(pyTuple);
     }
@@ -595,11 +595,11 @@ internal_setBoolVectorAttrValue(scene_rdl2::rdl2::SceneObject& sceneObject,
     std::deque<scene_rdl2::rdl2::Bool> value;
 
     // Extract value from boost::python::object
-    if (PyList_CheckExact(pyValue.ptr()) == true) {
+    if ((bool)PyList_CheckExact(pyValue.ptr()) == true) {
         bp::list pyList = bp::extract<bp::list>(pyValue);
         value = conversions::PyContainerToStdDeque<scene_rdl2::rdl2::Bool>(pyList);
     }
-    else if (PyTuple_CheckExact(pyValue.ptr()) == true) {
+    else if ((bool)PyTuple_CheckExact(pyValue.ptr()) == true) {
         bp::tuple pyTuple = bp::extract<bp::tuple>(pyValue);
         value = conversions::PyContainerToStdDeque<scene_rdl2::rdl2::Bool>(pyTuple);
     }
@@ -640,11 +640,11 @@ internal_setPrimitiveVectorAttrValue(scene_rdl2::rdl2::SceneObject& sceneObject,
     std::vector<T> value;
 
     // Extract value from Python object
-    if (PyList_CheckExact(pyValue.ptr()) == true) {
+    if ((bool)PyList_CheckExact(pyValue.ptr()) == true) {
         bp::list pyList = bp::extract<bp::list>(pyValue);
         value = conversions::PyPrimitiveContainerToStdVector<T>(pyList);
     }
-    else if (PyTuple_CheckExact(pyValue.ptr()) == true) {
+    else if ((bool)PyTuple_CheckExact(pyValue.ptr()) == true) {
         bp::tuple pyTuple = bp::extract<bp::tuple>(pyValue);
         value = conversions::PyPrimitiveContainerToStdVector<T>(pyTuple);
     }
@@ -695,11 +695,11 @@ internal_setVecVectorAttrValue(scene_rdl2::rdl2::SceneObject& sceneObject,
     std::vector<T> value;
 
     // Extract value from Python object
-    if (PyList_CheckExact(pyValue.ptr()) == true) {
+    if ((bool)PyList_CheckExact(pyValue.ptr()) == true) {
         bp::list pyList = bp::extract<bp::list>(pyValue);
         value = conversions::PyVecContainerToStdVector<T>(pyList);
     }
-    else if (PyTuple_CheckExact(pyValue.ptr()) == true) {
+    else if ((bool)PyTuple_CheckExact(pyValue.ptr()) == true) {
         bp::tuple pyTuple = bp::extract<bp::tuple>(pyValue);
         value = conversions::PyVecContainerToStdVector<T>(pyTuple);
     }
@@ -742,11 +742,11 @@ internal_setMatrixVectorAttrValue(scene_rdl2::rdl2::SceneObject& sceneObject,
     std::vector<T> value;
 
     // Extract value from Python object
-    if (PyList_CheckExact(pyValue.ptr()) == true) {
+    if ((bool)PyList_CheckExact(pyValue.ptr()) == true) {
         bp::list pyList = bp::extract<bp::list>(pyValue);
         value = conversions::PyMatrixContainerToStdVector<T>(pyList);
     }
-    else if (PyTuple_CheckExact(pyValue.ptr()) == true) {
+    else if ((bool)PyTuple_CheckExact(pyValue.ptr()) == true) {
         bp::tuple pyTuple = bp::extract<bp::tuple>(pyValue);
         value = conversions::PyMatrixContainerToStdVector<T>(pyTuple);
     }
