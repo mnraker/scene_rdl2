@@ -79,7 +79,7 @@
     {                                                                        \
     }
 
-// DECLARE_HANDLE() Macro:
+// RDL2_DECLARE_HANDLE() Macro:
 //  We desire some semblance to type-safety in our ISPC RDL2 queries.
 //   There is just one true type (AttributeKeyISPC, see ISPCSupport.h)
 //   but we would like to require code to use the appropriately typed
@@ -88,7 +88,7 @@
 //  Reluctantly, we employ an old Microsoft trick by which we can
 //   have distinctly-typed pointers.  The following macro...
 //  
-//   DECLARE_HANDLE(Color)
+//   RDL2_DECLARE_HANDLE(Color)
 //
 //  ...expands into:
 //
@@ -109,15 +109,15 @@
 //  It is used in ISPCSupport.h to declare the differt kinds of key types
 //   ISPC will use to query parameters from RDL2, e.g.
 //
-//    DECLARE_HANDLE(BoolAttributeKeyISPC);
-//    DECLARE_HANDLE(FloatAttributeKeyISPC);
+//    RDL2_DECLARE_HANDLE(BoolAttributeKeyISPC);
+//    RDL2_DECLARE_HANDLE(FloatAttributeKeyISPC);
 //    (etc.)
 
 #ifdef ISPC
-#define DECLARE_HANDLE(name) struct name##ISPC { int64 unused; }; \
+#define RDL2_DECLARE_HANDLE(name) struct name##ISPC { int64 unused; }; \
                              typedef name##ISPC name;
 #else
-#define DECLARE_HANDLE(name) struct name##ISPC { int64 unused; };
+#define RDL2_DECLARE_HANDLE(name) struct name##ISPC { int64 unused; };
 #endif
 
 

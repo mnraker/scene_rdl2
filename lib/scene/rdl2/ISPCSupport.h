@@ -11,12 +11,12 @@
 // Establish our ISPC key types.  These types are shared in ISPC and
 //  C++.   They are quasi-typed pointers.
 //  (see lib/rdl2/Macros.h for info)
-DECLARE_HANDLE(BoolAttrKey);
-DECLARE_HANDLE(IntAttrKey);
-DECLARE_HANDLE(FloatAttrKey);
-DECLARE_HANDLE(Float2AttrKey);  
-DECLARE_HANDLE(Float3AttrKey);  // and Color
-DECLARE_HANDLE(Float4AttrKey);  // and Color4
+RDL2_DECLARE_HANDLE(BoolAttrKey);
+RDL2_DECLARE_HANDLE(IntAttrKey);
+RDL2_DECLARE_HANDLE(FloatAttrKey);
+RDL2_DECLARE_HANDLE(Float2AttrKey);  
+RDL2_DECLARE_HANDLE(Float3AttrKey);  // and Color
+RDL2_DECLARE_HANDLE(Float4AttrKey);  // and Color4
 
 // Used as a context to allow C to pass SceneObject pointers
 //  that ISPC needs
