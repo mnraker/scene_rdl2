@@ -7,6 +7,8 @@
 #include "Platform.h"
 #if defined(__aarch64__)
    #include <scene_rdl2/common/arm/emulation.h>
+#elif defined(__WIN32__)
+#include <intrin.h>
 #else
 #include <x86intrin.h>
 #endif
@@ -67,8 +69,6 @@
 
 #if defined(__WIN32__)
 
-#include <intrin.h>
-
 __forceinline uint64 __rdpmc(int i) {
   return __readpmc(i);
 }
@@ -95,6 +95,48 @@ __forceinline size_t __popcnt(size_t in) {
 #endif
 
 #endif
+
+__forceinline int __builtin_ctz(unsigned x)
+{
+#if defined(_M_ARM) || defined(_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC)
+    return (int)_CountTrailingZeros(x);
+#elif defined(__AVX2__) || defined(__BMI__)
+    return (int)_tzcnt_u32(x);
+#else
+    unsigned long r;
+    _BitScanForward(&r, x) ? return (int)r : return 32;
+#endif
+}
+
+__forceinline int __builtin_ctzll(unsigned long long x)
+{
+#if defined(_M_ARM) || defined(_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC)
+    return (int)_CountTrailingZeros64(x);
+#elif defined(_WIN64)
+#if defined(__AVX2__) || defined(__BMI__)
+    return (int)_tzcnt_u64(x);
+#else
+    unsigned long r;
+    _BitScanForward64(&r, x) ? return (int)r : return 32;
+#endif
+#else
+    int l = __builtin_ctz((unsigned)x);
+    int h = __builtin_ctz((unsigned)(x >> 32)) + 32;
+    return !!((unsigned)x) ? l : h;
+#endif
+}
+
+__forceinline int __builtin_clz(unsigned x)
+{
+#if defined(_M_ARM) || defined(_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC)
+    return (int)_CountLeadingZeros(x);
+#elif defined(__AVX2__) || defined(__LZCNT__)
+    return (int)_lzcnt_u32(x);
+#else
+    unsigned long r;
+    _BitScanReverse(&r, x) ? return (int)(r ^ 31) : return 32;
+#endif
+}
 
 __forceinline int __bsf(int v) {
 #if defined(__AVX2__) 
