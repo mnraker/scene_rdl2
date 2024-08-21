@@ -449,7 +449,7 @@ namespace simd
   {
     return _mm256_atan2_ps(a.m256, b.m256);
   }
-#elif not defined (__INTEL_COMPILER)
+#elif !defined (__INTEL_COMPILER)
 
   // Atan() + Atan2() AVX Intrinsic Emulator
   // Intel provides an atan and atan2 intrinsic in their short vector math library.
@@ -464,7 +464,11 @@ namespace simd
   // https://github.com/xoolive/geodesy/blob/master/license.txt
 
   #define ALIGN32_BEG
-  #define ALIGN32_END __attribute__((aligned(32)))
+  #ifndef _MSC_VER
+      #define ALIGN32_END __attribute__((aligned(32)))
+  #else
+      #define ALIGN32_END alignas(32)
+  #endif
 
   // Masks
   static const ALIGN32_BEG int _mm256_cst_sign_mask[8] ALIGN32_END =
