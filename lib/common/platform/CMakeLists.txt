@@ -16,6 +16,7 @@ target_sources(${component}
 set_property(TARGET ${component}
     PROPERTY PUBLIC_HEADER
         DebugLog.h
+        Endian.h
         HybridUniformData.hh
         HybridUniformData.h
         HybridVaryingData.hh
