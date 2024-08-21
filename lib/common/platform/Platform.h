@@ -3,6 +3,29 @@
 
 #pragma once
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)) && !defined(__CYGWIN__)
+#  if !defined(__WIN32__)
+#     define __WIN32__
+#  endif
+#endif
+
+#if defined(__WIN32__)
+
+
+#ifndef NOMINMAX
+#  define NOMINMAX
+#endif
+#ifndef _USE_MATH_DEFINES
+#  define _USE_MATH_DEFINES
+#endif
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#include <windows.h>
+
+#endif // if defined(__WIN32__)
+
+#include "Endian.h"
+
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -155,12 +178,18 @@
 #endif
 
 #ifdef __WIN32__
+#undef ALIGN
+#undef __aligned
 #undef __noinline
+#undef __align
 #define __noinline             __declspec(noinline)
-//#define __forceinline          __forceinline
-//#define __restrict             __restrict
+#define __forceinline          inline
+#define finline                inline
+#define __restrict             __restrict
 #define __thread               __declspec(thread)
-#define __aligned(...)           __declspec(align(__VA_ARGS__))
+#define __aligned(...)         __declspec(align(__VA_ARGS__))
+#define __align(x)             alignas(x)
+#define ALIGN(x)               alignas(x)
 //#define __FUNCTION__           __FUNCTION__
 #define debugbreak()           __debugbreak()
 
@@ -181,7 +210,7 @@
 #else
 #define CACHE_LINE_SIZE        64u
 #endif
-#define CACHE_ALIGN            __align(CACHE_LINE_SIZE)
+//#define CACHE_ALIGN            __align(CACHE_LINE_SIZE)
 
 #define debugbreak()         __asm__(".inst 0xd4200000")
 
@@ -214,7 +243,7 @@
 #define __align(...)           __attribute__((aligned(__VA_ARGS__)))
 #define ALIGN(x)               __attribute__((aligned(x)))
 #define CACHE_LINE_SIZE        64u
-#define CACHE_ALIGN            __align(CACHE_LINE_SIZE)
+//#define CACHE_ALIGN            __align(CACHE_LINE_SIZE)
 // MoonRay: end *****
 // Intel: begin *****
 /*
@@ -324,7 +353,7 @@ void debugPrint(const char* name, const Car& car, const Cdr&... cdr)
 #define FORCE_LINK_THAT(unit) \
   extern bool unit##_force_link_me; bool unit##_force_link = unit##_force_link_me;
 
-#ifdef __APPLE__
+#if defined(__APPLE__)
   void fedisableexcept(unsigned int excepts);
   int feenableexcept(unsigned int excepts);
   int fegetexcept();
@@ -356,14 +385,6 @@ typedef               char   int8;
 typedef unsigned      char  uint8;
 */
 // Intel: end *****
-
-#ifdef __WIN32__
-#if defined(__X86_64__)
-typedef int64 ssize_t;
-#else
-typedef int32 ssize_t;
-#endif
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Disable some compiler warnings
@@ -417,7 +438,28 @@ typedef int32 ssize_t;
 
 #include "Platform.hh"
 
+#ifdef __WIN32__
+#if defined(__X86_64__)
+typedef int64 ssize_t;
+#else
+typedef int32 ssize_t;
+#endif
+#endif
+
+#ifndef __WIN32__
 #define SCENE_RDL2_SIMD_ALIGN          __align(SIMD_MEMORY_ALIGNMENT)
+#define CACHE_ALIGN                    __align(CACHE_LINE_SIZE)
+#else
+#define SCENE_RDL2_SIMD_ALIGN          __aligned(SIMD_MEMORY_ALIGNMENT)
+#define CACHE_ALIGN                    alignas(CACHE_LINE_SIZE)
+#endif
+
+// Platform-agnostic path separator
+#ifdef __WIN32__
+const std::string os_pathsep(";");
+#else
+const std::string os_pathsep(":");
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // Default Includes and Functions
@@ -546,6 +588,7 @@ namespace util {
       // of two is a multiple of that number: 2*(2*2*2), 2*2*(2*2*2), ...
       MNRY_ASSERT(align >= sizeof(void*));
 
+#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600)
       void* memptr = nullptr;
 #if defined(DEBUG)
       const int error =
@@ -557,9 +600,19 @@ namespace util {
       MNRY_ASSERT(error == 0, "Some unexpected error");
 #endif
       return memptr;
+#elif defined(_MSC_VER)
+    return _aligned_malloc(size, align);
+#endif
   }
 
-  inline void alignedFree(const void* ptr)      { free(const_cast<void *>(ptr)); }
+inline void alignedFree(const void* ptr)
+{
+#if defined(_MSC_VER)
+    _aligned_free(const_cast<void*>(ptr));
+#else
+    free(const_cast<void*>(ptr));
+#endif
+}
 
 // MoonRay: end *****
 

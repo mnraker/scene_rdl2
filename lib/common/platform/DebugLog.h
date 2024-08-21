@@ -48,9 +48,9 @@
   #pragma warning(disable:4127)
   // for warning C4996: 'sprintf': This function or variable may be unsafe.
   #pragma warning(disable:4996)
-  #define NOMINMAX
-  #define WIN32_LEAN_AND_MEAN
-  #include <windows.h>
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
   #undef near
   #undef far
   #include <process.h>

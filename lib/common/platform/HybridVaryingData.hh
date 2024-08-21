@@ -92,6 +92,22 @@
         uint32_t totalSize = sizeof(type_name);         \
         uint32_t totalOffset = 0;                       \
 
+#ifdef _MSC_VER
+
+    #define HVD_VALIDATE(type_name, member_name)                                 \
+        ofs = (uint32_t)((intptr_t)(&((((type_name *)(0))->member_name))));      \
+        ofs *= numLanes;                                                         \
+        sizeOfItem = sizeof(((((type_name *)(0))->member_name)));                \
+        if (verbose) {                                                           \
+            printf("    " #member_name ": %d / %d\n",                            \
+                    (int)ofs, (int)(totalSize * numLanes));                      \
+        }                                                                        \
+        totalOffset = (ofs / numLanes) + sizeOfItem;                             \
+        ofs += sizeof(type_name) * numLanes;                                     \
+        HVD_UPDATE_CRC()
+
+#else
+
     #define HVD_VALIDATE(type_name, member_name)                                 \
         ofs = (uint32_t)((intptr_t)(&((((type_name *)(0))->member_name))));      \
         ofs *= numLanes;                                                         \
@@ -109,6 +125,8 @@
         totalOffset = (ofs / numLanes) + sizeOfItem;                             \
         ofs += sizeof(type_name) * numLanes;                                     \
         HVD_UPDATE_CRC()
+
+#endif
 
     #define HVD_END_VALIDATION                                                  \
         if (verbose) {                                                          \

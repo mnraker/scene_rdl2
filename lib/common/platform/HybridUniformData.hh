@@ -185,6 +185,23 @@
         uint32_t totalSize = sizeof(type_name);         \
         uint32_t totalOffset = 0;                       \
 
+// TODO: alignof causes a syntax error on MSVC, need to investigate
+
+#ifdef _MSC_VER
+
+    #define HUD_VALIDATE(type_name, member_name)                                 \
+        ofs = (uint32_t)((intptr_t)(&((((type_name *)(0))->member_name))));      \
+        sizeOfItem = sizeof(((((type_name *)(0))->member_name)));                \
+        if (verbose) {                                                           \
+            printf("    " #member_name ": %d / %d\n",                            \
+                    (int)ofs, (int)sizeof(type_name));                           \
+        }                                                                        \
+        totalOffset = ofs + sizeOfItem;                                          \
+        ofs += (uint32_t)sizeof(type_name);                                      \
+        HUD_UPDATE_CRC()
+
+#else
+
     #define HUD_VALIDATE(type_name, member_name)                                 \
         ofs = (uint32_t)((intptr_t)(&((((type_name *)(0))->member_name))));      \
         sizeOfItem = sizeof(((((type_name *)(0))->member_name)));                \
@@ -202,6 +219,7 @@
         ofs += (uint32_t)sizeof(type_name);                                      \
         HUD_UPDATE_CRC()
 
+#endif
     #define HUD_END_VALIDATION                                                   \
         if (verbose) {                                                           \
             printf("    PADDING NEEDED: %d BYTES (aligned to blocks of size %d)\n",\
