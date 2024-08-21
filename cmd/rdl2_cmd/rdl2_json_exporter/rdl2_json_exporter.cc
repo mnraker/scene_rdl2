@@ -397,7 +397,12 @@ createFile(const rdl2::SceneClass* scene_class,
     if (!outFileName.empty()) {
         setupOutputFile(outFileName, scene_class->getName(), options, 
             data.mExtension);
-        outfile.open(outFileName.c_str(), std::ios_base::out);
+        outfile.open(outFileName.c_str(), std::ios_base::out
+#ifdef _MSC_VER
+            // Makes sure line-endings are LF and not CRLF
+            | std::ios::binary
+#endif
+        );
         Logger::debug("Using file: ", outFileName);
         out = &outfile;
     }
@@ -434,7 +439,12 @@ createFile(const std::vector<const rdl2::SceneClass*>& scene_classes,
     if (!outFileName.empty()) {
         setupOutputFile(outFileName, scene_classes[0]->getName(), options, 
             data.mExtension);
-        outfile.open(outFileName.c_str(), std::ios_base::out);
+        outfile.open(outFileName.c_str(), std::ios_base::out
+#ifdef _MSC_VER
+            // Makes sure line-endings are LF and not CRLF
+            | std::ios::binary
+#endif
+        );
         Logger::debug("Using file: ", outFileName);
         out = &outfile;
     }

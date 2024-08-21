@@ -702,7 +702,13 @@ void
 AsciiWriter::toFile(const std::string& filename) const
 {
     // Create an output file stream.
-    std::ofstream out(filename.c_str(), std::ios::trunc);
+
+    std::ofstream out(filename.c_str(), std::ios::trunc
+#ifdef _MSC_VER
+        // Makes sure line-endings are LF and not CRLF
+        | std::ios::binary
+#endif
+    );
     if (!out) {
         throw except::IoError(util::buildString("Could not open file '",
                 filename, "' for writing with an RDL2 ASCII writer."));
