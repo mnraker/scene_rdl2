@@ -347,7 +347,7 @@ TestValueContainer::testString()
                      vcEnq->enqString(data[i]);
                      // string encoded size = variableLen(size) + size
                      size_t currSize =
-                         ValueContainerUtil::variableLengthEncodingSize(data[i].size()) +
+                         ValueContainerUtil::variableLengthEncodingSize((unsigned long)data[i].size()) +
                          data[i].size();
                      totalSize += currSize;
                  }
@@ -670,7 +670,7 @@ TestValueContainer::testBoolVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqBoolVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(char) * vec.size();
                  return total;
              },
@@ -693,7 +693,7 @@ TestValueContainer::testIntVector() // int32_t
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqIntVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((int)vec.size());
                  total += sizeof(int) * vec.size();
                  return total;
              },
@@ -716,7 +716,7 @@ TestValueContainer::testUIntVector() // uint32_t
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqUIntVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(unsigned int) * vec.size();
                  return total;
              },
@@ -739,7 +739,7 @@ TestValueContainer::testLongVector() // int64_t
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqLongVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((long)vec.size());
                  total += sizeof(long) * vec.size();
                  return total;
              },
@@ -762,7 +762,7 @@ TestValueContainer::testFloatVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqFloatVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(float) * vec.size();
                  return total;
              },
@@ -785,7 +785,7 @@ TestValueContainer::testDoubleVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqDoubleVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned long)vec.size());
                  total += sizeof(double) * vec.size();
                  return total;
              },
@@ -808,9 +808,9 @@ TestValueContainer::testStringVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqStringVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned long)vec.size());
                  for (const auto &itr: vec) {
-                     total += ValueContainerUtil::variableLengthEncodingSize(itr.size());
+                     total += ValueContainerUtil::variableLengthEncodingSize((unsigned long)itr.size());
                      total += itr.size();
                  }
                  return total;
@@ -833,7 +833,7 @@ TestValueContainer::testRgbVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqRgbVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(Rgb) * vec.size();
                  return total;
              },
@@ -855,7 +855,7 @@ TestValueContainer::testRgbaVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqRgbaVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(Rgba) * vec.size();
                  return total;
              },
@@ -877,7 +877,7 @@ TestValueContainer::testVec2fVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVec2fVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(Vec2f) * vec.size();
                  return total;
              },
@@ -899,7 +899,7 @@ TestValueContainer::testVec2dVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVec2dVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned long)vec.size());
                  total += sizeof(Vec2d) * vec.size();
                  return total;
              },
@@ -921,7 +921,7 @@ TestValueContainer::testVec3fVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVec3fVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(Vec3f) * vec.size();
                  return total;
              },
@@ -943,7 +943,7 @@ TestValueContainer::testVec3dVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVec3dVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned long)vec.size());
                  total += sizeof(Vec3d) * vec.size();
                  return total;
              },
@@ -965,7 +965,7 @@ TestValueContainer::testVec4fVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVec4fVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(Vec4f) * vec.size();
                  return total;
              },
@@ -987,7 +987,7 @@ TestValueContainer::testVec4dVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVec4dVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned long)vec.size());
                  total += sizeof(Vec4d) * vec.size();
                  return total;
              },
@@ -1022,7 +1022,7 @@ TestValueContainer::testMat4fVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqMat4fVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  total += sizeof(Mat4f) * vec.size();
                  return total;
              },
@@ -1057,7 +1057,7 @@ TestValueContainer::testMat4dVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqMat4dVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned long)vec.size());
                  total += sizeof(Mat4d) * vec.size();
                  return total;
              },
@@ -1089,7 +1089,7 @@ TestValueContainer::testSceneObjectVector()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqSceneObjectVector(data);
 
-                 size_t totalSize = ValueContainerUtil::variableLengthEncodingSize(data.size());
+                 size_t totalSize = ValueContainerUtil::variableLengthEncodingSize((unsigned long)data.size());
                  for (size_t i = 0; i < data.size(); ++i) {
                      totalSize += dataSize[i];
                  }
@@ -1140,7 +1140,7 @@ TestValueContainer::testSceneObjectIndexable()
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqSceneObjectIndexable(data);
 
-                 size_t totalSize = ValueContainerUtil::variableLengthEncodingSize(data.size());
+                 size_t totalSize = ValueContainerUtil::variableLengthEncodingSize((unsigned long)data.size());
                  for (size_t i = 0; i < data.size(); ++i) {
                      totalSize += dataSize[i];
                  }
@@ -1182,7 +1182,7 @@ TestValueContainer::testVLIntVector() // int32_t
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVLIntVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned int)vec.size());
                  for (const auto &itr: vec) {
                      total += ValueContainerUtil::variableLengthEncodingSize(itr);
                  }
@@ -1207,7 +1207,7 @@ TestValueContainer::testVLLongVector() // int64_t
              [&](ValueContainerEnq *vcEnq) -> size_t { // enqFunc
                  vcEnq->enqVLLongVector(vec);
 
-                 size_t total = ValueContainerUtil::variableLengthEncodingSize(vec.size());
+                 size_t total = ValueContainerUtil::variableLengthEncodingSize((unsigned long)vec.size());
                  for (const auto &itr: vec) {
                      total += ValueContainerUtil::variableLengthEncodingSize(long(itr));
                  }

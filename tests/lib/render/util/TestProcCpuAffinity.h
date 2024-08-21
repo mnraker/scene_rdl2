@@ -21,8 +21,11 @@ public:
     void testFullAffinity();
 
     CPPUNIT_TEST_SUITE(TestProcCpuAffinity);
+    // No affinity support on windows (yet)
+#ifndef _MSC_VER
     CPPUNIT_TEST(testPartialAffinity);
     CPPUNIT_TEST(testFullAffinity);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:

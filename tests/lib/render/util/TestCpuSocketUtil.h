@@ -22,7 +22,10 @@ public:
     CPPUNIT_TEST_SUITE(TestCpuSocketUtil);
     CPPUNIT_TEST(testCpuIdDef);
     CPPUNIT_TEST(testShowCpuIdTbl);
+    // no grep or /proc/cpuinfo on windows, needs a re-impl
+#ifndef _MSC_VER
     CPPUNIT_TEST(testSetupCpuInfo);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 

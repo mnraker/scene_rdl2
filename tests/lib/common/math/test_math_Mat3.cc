@@ -8,6 +8,7 @@
 
 #include <tbb/tick_count.h>
 
+#include <scene_rdl2/common/platform/Platform.h>
 #include <scene_rdl2/common/math/Mat3.h>
 #include <scene_rdl2/common/math/Vec3.h>
 #include <scene_rdl2/common/math/Math.h>
@@ -17,7 +18,7 @@ using namespace scene_rdl2;
 using namespace scene_rdl2::math;
 
 template <typename M, typename V>
-__attribute__((noinline)) void
+__noinline void
 generateRotation(std::vector<M>& data)
 {
     M mr;
@@ -33,7 +34,7 @@ generateRotation(std::vector<M>& data)
 }
 
 template <typename M>
-__attribute__((noinline)) void
+__noinline void
 generateScale(std::vector<M>& data)
 {
     M ms(1.1,0.0,0.0,
@@ -43,7 +44,7 @@ generateScale(std::vector<M>& data)
 }
 
 template <typename V>
-__attribute__((noinline)) void
+__noinline void
 generatePoints(std::vector<V>& data)
 {
     V offset(0.001, 0.001, 0.001);
@@ -57,7 +58,7 @@ generatePoints(std::vector<V>& data)
 }
 
 template <typename M, typename V>
-__attribute__((noinline)) void
+__noinline void
 compute(const int iterations,
         const std::vector<M>& rotation,
         const std::vector<M>& scale,
@@ -72,7 +73,7 @@ compute(const int iterations,
     }
 }
 template <typename M, typename V>
-__attribute__((noinline)) void
+__noinline void
 gmathCompute(const int iterations,
         const std::vector<M>& rotation,
         const std::vector<M>& scale,

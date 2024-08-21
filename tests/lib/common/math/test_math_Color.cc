@@ -3,9 +3,10 @@
 
 #include "test_math_Color.h"
 
-#include <fenv.h>
+#include <scene_rdl2/render/util/FloatingPointExceptionsRAII.h>
 
 using namespace scene_rdl2::math;
+using namespace scene_rdl2::util;
 
 void
 TestCommonMathColor::testCopy()
@@ -34,8 +35,7 @@ TestCommonMathColor::testUnary()
 {
     TSLOG_INFO(__func__);
 
-    const int exceptions = fegetexcept();
-    feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+    FloatingPointExceptionsRAII fpexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
     
     const Color a(1, 2, 3);
     const Color b = +a;
@@ -56,10 +56,6 @@ TestCommonMathColor::testUnary()
     CPPUNIT_ASSERT(isEqual(rsqrt(h), g));
     CPPUNIT_ASSERT(isEqual(sqrt(h), f));
     CPPUNIT_ASSERT(isEqual(sqrt(h), abs(-f)));
-    
-    feclearexcept(FE_ALL_EXCEPT);
-    fedisableexcept(FE_ALL_EXCEPT);
-    feenableexcept(exceptions);
 }
 
 void
@@ -67,8 +63,7 @@ TestCommonMathColor::testBinary()
 {
     TSLOG_INFO(__func__);
 
-    const int exceptions = fegetexcept();
-    feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+    FloatingPointExceptionsRAII fpexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
     
     const Color a(0, 1, 2);
     const Color b(1, 3, 5);
@@ -85,10 +80,6 @@ TestCommonMathColor::testBinary()
     
     CPPUNIT_ASSERT(isEqual(min(b, c), Color(1, -6, 5)));
     CPPUNIT_ASSERT(isEqual(max(b, c), Color(2, 3, 10)));
-                   
-    feclearexcept(FE_ALL_EXCEPT);
-    fedisableexcept(FE_ALL_EXCEPT);
-    feenableexcept(exceptions);
 }
 
 void
@@ -96,8 +87,7 @@ TestCommonMathColor::testAssignment()
 {
     TSLOG_INFO(__func__);
 
-    const int exceptions = fegetexcept();
-    feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+    FloatingPointExceptionsRAII fpexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
     
     Color a(1, 2, 3);
     a += Color(1);
@@ -122,10 +112,6 @@ TestCommonMathColor::testAssignment()
     CPPUNIT_ASSERT(isEqual(a4, Color4(0, 20, 60, 120)));
     a4 *= 0.5f;
     CPPUNIT_ASSERT(isEqual(a4, Color4(0, 10, 30, 60)));
-
-    feclearexcept(FE_ALL_EXCEPT);
-    fedisableexcept(FE_ALL_EXCEPT);
-    feenableexcept(exceptions);
 }
 
 void
@@ -133,8 +119,7 @@ TestCommonMathColor::testReductions()
 {
     TSLOG_INFO(__func__);
 
-    const int exceptions = fegetexcept();
-    feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+    FloatingPointExceptionsRAII fpexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
     
     Color a(1, 2, 3);
     CPPUNIT_ASSERT(isEqual(reduce_add(a), 6.0f));
@@ -153,10 +138,6 @@ TestCommonMathColor::testReductions()
     CPPUNIT_ASSERT(isEqual(reduce_mul(a), 6.0f));
     CPPUNIT_ASSERT(isEqual(reduce_min(a), 1.0f));
     CPPUNIT_ASSERT(isEqual(reduce_max(a), 3.0f));
-
-    feclearexcept(FE_ALL_EXCEPT);
-    fedisableexcept(FE_ALL_EXCEPT);
-    feenableexcept(exceptions);
 }
 
 void
@@ -164,8 +145,7 @@ TestCommonMathColor::testComparisons()
 {
     TSLOG_INFO(__func__);
 
-    const int exceptions = fegetexcept();
-    feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+    FloatingPointExceptionsRAII fpexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
     
     const Color a(0, 1, 2);
     CPPUNIT_ASSERT(a == Color(0, 1, 2));
@@ -199,10 +179,6 @@ TestCommonMathColor::testComparisons()
     const Color b(-1, -2, -3);
     CPPUNIT_ASSERT(a == select(true, a, b));
     CPPUNIT_ASSERT(b == select(false, a, b));
-
-    feclearexcept(FE_ALL_EXCEPT);
-    fedisableexcept(FE_ALL_EXCEPT);
-    feenableexcept(exceptions);
 }
 
 void
@@ -210,8 +186,7 @@ TestCommonMathColor::testSpecial()
 {
     TSLOG_INFO(__func__);
 
-    const int exceptions = fegetexcept();
-    feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+    FloatingPointExceptionsRAII fpexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
 
     const Color a(1.0f / 0.212671f, 1.0f / 0.715160f, 1.0f / 0.072169f);
     CPPUNIT_ASSERT(isEqual(relativeLuminance(a), 3.0f));
@@ -237,10 +212,6 @@ TestCommonMathColor::testSpecial()
 
     TSLOG_INFO("Black: " << sBlack);
     TSLOG_INFO("White: " << sWhite);
-
-    feclearexcept(FE_ALL_EXCEPT);
-    fedisableexcept(FE_ALL_EXCEPT);
-    feenableexcept(exceptions);
 }
 
 
