@@ -9,7 +9,9 @@
 #include <iomanip>
 
 #include <limits.h>
+#ifndef _MSC_VER
 #include <unistd.h>             // gethostname
+#endif
 
 #ifndef HOST_NAME_MAX
 # ifdef _POSIX_HOST_NAME_MAX
@@ -207,7 +209,12 @@ RecTimeLap::saveFile(const std::string &str) const
     if (!oFile) return false;
 
     char hostname[HOST_NAME_MAX];
+#ifndef _MSC_VER
     ::gethostname(hostname, HOST_NAME_MAX);
+#else
+    DWORD bufCharCount = HOST_NAME_MAX;
+    GetComputerNameA(reinterpret_cast<LPSTR>(hostname), &bufCharCount);
+#endif
     oFile << "\nhostname:" << hostname << '\n';
     oFile << str;
     oFile.close();

@@ -8,7 +8,13 @@
 namespace scene_rdl2 {
 namespace rec_time {
 
-class __attribute__((aligned(64))) RecDoubleLog
+#ifndef _MSC_VER
+#define __attribute_aligned(x) __attribute__((aligned(x)))
+#else
+#define __attribute_aligned(x) __declspec(align(x))
+#endif
+
+class __attribute_aligned(64) RecDoubleLog
 //
 // Simple logging for double value
 //
