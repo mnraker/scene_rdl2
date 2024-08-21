@@ -10,6 +10,11 @@
 
 //#define DEBUG_MSG_SETUP_CPU_INFO
 
+#ifdef _MSC_VER
+#define popen _popen
+#define pclose _pclose
+#endif
+
 namespace {
 
 bool

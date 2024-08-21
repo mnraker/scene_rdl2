@@ -20,6 +20,13 @@
 #include <typeinfo>
 #include <vector>
 
+#ifndef _MSC_VER
+#define UNUSED __attribute__((unused))
+#else
+#define UNUSED
+#define setenv(x,y,z) _putenv_s(x,y)
+#endif
+
 CPPUNIT_TEST_SUITE_REGISTRATION(TestCommonUtil);
 
 using namespace scene_rdl2::util;
@@ -174,7 +181,7 @@ void TestCommonUtil::testAlloc()
 {
     using namespace scene_rdl2::alloc;
 
-    struct __attribute__ ((aligned(64))) S
+    struct ALIGN(64) S
     {
         char c;
     };
@@ -878,17 +885,17 @@ void TestCommonUtil::testSManip()
 
     // Just make sure this compiles.
     int x = 42;
-    const auto m __attribute__((unused)) = mymanip(x, 3.14, MoveOnly(82));
+    const auto m UNUSED = mymanip(x, 3.14, MoveOnly(82));
 }
 
 void TestCommonUtil::testGUID()
 {
-    const GUID g0 = GUID::littleEndian(0x78, 0x56, 0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);
+    const scene_rdl2::util::GUID g0 = scene_rdl2::util::GUID::littleEndian(0x78, 0x56, 0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);
     CPPUNIT_ASSERT(g0.asString() == "12345678-1234-5678-1234-567812345678");
 
     std::set<std::string> guids;
     for (int i = 0; i < 100; ++i) {
-        const GUID g1 = GUID::uuid4();
+        const scene_rdl2::util::GUID g1 = scene_rdl2::util::GUID::uuid4();
         const std::string s = g1.asString();
         CPPUNIT_ASSERT(s.length() == 36);
         CPPUNIT_ASSERT(s[14] == '4');
@@ -905,10 +912,10 @@ void TestCommonUtil::testGUID()
         guids.insert(s);
     }
 
-    const GUID g2("c6da2db7-efc7-4364-97d9-429b1a0a2f77");
+    const scene_rdl2::util::GUID g2("c6da2db7-efc7-4364-97d9-429b1a0a2f77");
     CPPUNIT_ASSERT(g2.asString() == "c6da2db7-efc7-4364-97d9-429b1a0a2f77");
-    const GUID g3 = GUID::uuid4();
-    const GUID g4(g3.asString());
+    const scene_rdl2::util::GUID g3 = scene_rdl2::util::GUID::uuid4();
+    const scene_rdl2::util::GUID g4(g3.asString());
     CPPUNIT_ASSERT(g3 == g4);
 }
 

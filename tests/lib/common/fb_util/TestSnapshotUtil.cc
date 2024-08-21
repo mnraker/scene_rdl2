@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
+#include <numeric>
 #include <vector>
 #include <stdlib.h> // posix_memalign
 

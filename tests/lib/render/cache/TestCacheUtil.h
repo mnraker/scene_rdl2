@@ -8,6 +8,10 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestFixture.h>
 
+#ifdef _MSC_VER
+#include <type_traits>
+#endif
+
 namespace scene_rdl2 {
 namespace cache {
 namespace unittest {
@@ -79,8 +83,23 @@ protected:
     // Compare vector data start address and source data address
     template <typename T>
     bool compareVectorAddr(const T &a, const uintptr_t srcAddr) {
+#ifndef _MSC_VER
         return ((uintptr_t)a.data() ==
                 (srcAddr + ValueContainerUtil::variableLengthEncodingSize(a.size())));
+#else
+        if constexpr(std::is_same<float, T::value_type>::value) {
+            return ((uintptr_t)a.data() ==
+                    (srcAddr + ValueContainerUtil::variableLengthEncodingSize(static_cast<unsigned int>(a.size()))));
+        }
+        else if constexpr(std::is_same<double, T::value_type>::value) {
+            return ((uintptr_t)a.data() ==
+                    (srcAddr + ValueContainerUtil::variableLengthEncodingSize(static_cast<unsigned long>(a.size()))));
+        }
+        else {
+            return ((uintptr_t)a.data() ==
+                    (srcAddr + ValueContainerUtil::variableLengthEncodingSize(static_cast<T::value_type>(a.size()))));
+        }
+#endif
     }
 };
 
