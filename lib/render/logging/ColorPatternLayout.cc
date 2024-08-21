@@ -29,7 +29,7 @@ ColorPatternLayout::ColorPatternLayout(const log4cplus::helpers::Properties& pro
     init();
 }
 
-ColorPatternLayout::ColorPatternLayout(const std::string& ptrn)
+ColorPatternLayout::ColorPatternLayout(const log4cplus::tstring& ptrn)
     : log4cplus::PatternLayout(ptrn)
 {
     init();
