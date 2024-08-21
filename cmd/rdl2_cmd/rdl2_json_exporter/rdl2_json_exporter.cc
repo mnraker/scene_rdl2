@@ -28,8 +28,15 @@
 #include <utility>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <libgen.h>
+#ifndef _MSC_VER
+    #include <unistd.h>
+    #include <libgen.h>
+#else
+    #include <io.h>
+    #define access _access
+    #define W_OK 2
+    #define S_IWUSR _S_IWRITE
+#endif
 
 // Boost
 #include <boost/program_options.hpp>
@@ -52,7 +59,11 @@ const std::string BO_RDL2_VERSION_S = "rdl2_version";
 const std::string BO_MOONRAY_VERSION_S = "moonray_version";
 
 const std::string JSON_EXTENSION = ".json";
+#ifndef _MSC_VER
 const std::string PATH_SEPARATOR = bf::path("/").string(); // make native path separator
+#else
+const std::string PATH_SEPARATOR = "\\";
+#endif
 
 std::string SCENE_RDL2_VERSION = "unspecified";
 std::string MOONRAY_VERSION = "unspecified";
