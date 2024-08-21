@@ -5,7 +5,9 @@
 #include "CpuAffinityMask.h"
 
 #include <string>
+#ifndef _MSC_VER
 #include <unistd.h> // pid_t
+#endif
 
 namespace scene_rdl2 {
 
@@ -71,8 +73,10 @@ public:
 
 private:
 
+#ifndef _MSC_VER
     bool setAffinity(pid_t pid, std::string& errorMsg);
     bool getAffinity(pid_t pid, std::string& errorMsg);
+#endif
 
     //------------------------------
 

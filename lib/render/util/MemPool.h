@@ -478,7 +478,7 @@ private:
     {
         NUM_LEAF_NODES              = sizeof(uint64_t) * 8,  // 8byte * 8bit = 64 leaf nodes
         ENTRIES_PER_LEAF_NODE       = sizeof(uint64_t) * 8,  // 8byte * 8bit = 64 entries per leaf node
-        ENTRIES_PER_LEAF_NODE_SHIFT = math::compile_time::log2i(ENTRIES_PER_LEAF_NODE), // 6
+        ENTRIES_PER_LEAF_NODE_SHIFT = math::compile_time::log2i((size_t)ENTRIES_PER_LEAF_NODE), // 6
         NUM_ENTRIES                 = NUM_LEAF_NODES * ENTRIES_PER_LEAF_NODE, // 4096 total entries
     };
 
@@ -941,7 +941,11 @@ public:
 
             MemBlock *freshBlock = mBlockManager->allocateBlock();
 
+#ifndef _MSC_VER
             if (__builtin_expect((freshBlock != nullptr), 1)) {
+#else
+            if (freshBlock) {
+#endif
 
                 INC_COUNTER(BLOCKS_ALLOCATED);
 

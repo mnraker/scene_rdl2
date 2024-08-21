@@ -8,6 +8,11 @@
 #include <type_traits>
 #include <cstring>
 
+#ifdef _MSC_VER
+#include <scene_rdl2/common/platform/Intrinsics.h>
+#define __builtin_popcount __popcnt
+#endif
+
 namespace scene_rdl2 {
 namespace util {
 

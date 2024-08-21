@@ -7,7 +7,19 @@
 #include <iomanip>
 #include <sstream>
 
-#include <cxxabi.h>
+#ifdef _MSC_VER
+// We won't use the overhead of Platform.h here as it prevents bringing in
+// StrUtil.h into things like grid_util/TlSvr and breaking winsock2.h importing
+    #ifndef _INC_WINDOWS
+        #define WIN32_LEAN_AND_MEAN
+        #define VC_EXTRALEAN
+        #include <windows.h>
+    #endif
+    #include <Dbghelp.h>
+    #pragma comment(lib,"dbghelp.lib")
+#else
+    #include <cxxabi.h>
+#endif
 
 #ifdef __GNUC__
   #define ATTR_UNUSED __attribute__((unused))
@@ -171,8 +183,15 @@ inline
 std::string
 demangle(const std::string &str)
 {
+#ifdef _MSC_VER
+    char retvar[256];
+    memset(retvar, 0, 256);
+    UnDecorateSymbolName(str.c_str(), retvar, 256, 0);
+    return std::string(retvar);
+#else
     int st;
     return std::string(std::move(abi::__cxa_demangle(str.c_str(), 0, 0, &st)));
+#endif
 }
 
 inline

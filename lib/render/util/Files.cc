@@ -22,17 +22,28 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#ifndef _MSC_VER
 #include <libgen.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #if defined(__APPLE__)
      #include <sys/types.h>
      #include <sys/socket.h>
      #include <sys/uio.h>
+#elif defined(_MSC_VER)
+    #include <direct.h> // _mkdir
+    #define access _access
+    #define getcwd _getcwd
+    #define F_OK 0
+    #define W_OK 2
+    #define R_OK 4
 #else
 #include <sys/sendfile.h>
 #endif
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 #include <filesystem>
 
@@ -96,7 +107,11 @@ writeTest(const std::string& filePath, bool createDirectories)
     int fd = creat(filePath.c_str(), 0666);
     if (fd != -1) {
         // Success. Close and remove it.
+#ifndef _MSC_VER
         close(fd);
+#else
+        _close(fd);
+#endif
         unlink(filePath.c_str());
         return true;
     }
@@ -117,7 +132,11 @@ writeTest(const std::string& filePath, bool createDirectories)
             }
 
             // Does not exist, try to create directory.
+#ifdef _WIN32
+            if (_mkdir(leadingPath.c_str()) != 0) {
+#else
             if (mkdir(leadingPath.c_str(), 0777) != 0) {
+#endif
                 return false;
             }
         }
@@ -161,6 +180,13 @@ findFile(const std::string& name, const std::string& searchPath)
 void
 copyFile(const std::string& src, const std::string& dst)
 {
+#ifdef _MSC_VER
+    bool result = CopyFileExA(src.c_str(), dst.c_str(), NULL, NULL, false, 0);
+    if (!result) {
+        throw except::IoError(util::buildString("copyFile() failed: ",
+                std::strerror(errno)));
+    }
+#else
     // Open the input file.
     FileDescriptorGuard in(open(src.c_str(), O_RDONLY));
     if (in.fd == -1) {
@@ -194,6 +220,9 @@ copyFile(const std::string& src, const std::string& dst)
     while (bytesCopied < numBytes) {
         #if defined(__APPLE__)
         ssize_t result = sendfile(in.fd, out.fd, offset, (long long*) &bytesToCopy, NULL, 0);
+        #elif defined(_MSC_VER) // This is untested! I am not sure if zero-copy is possible on Windows
+        bool _result = TransmitFile(out.fd, in.fd, bytesToCopy, 0, NULL, NULL, 0);
+        ssize_t result = _result ? 1 : -1;
         #else
         ssize_t result = sendfile(out.fd, in.fd, &offset, bytesToCopy);
         #endif
@@ -207,6 +236,7 @@ copyFile(const std::string& src, const std::string& dst)
     }
 
     MNRY_ASSERT_REQUIRE(bytesCopied == numBytes);
+#endif
 }
 
 std::string
@@ -232,7 +262,7 @@ absolutePath(const std::string& filePath, std::string relativeToPath)
 std::string
 currentWorkingDirectory()
 {
-    #if defined(__APPLE__)
+    #if defined(__APPLE__) || defined(_MSC_VER)
     char* cwd = getcwd (NULL, 0);
     #else
     char* cwd = get_current_dir_name();
