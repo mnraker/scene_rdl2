@@ -90,6 +90,13 @@ SceneRdl2_cxx_compile_features(${component})
 SceneRdl2_cxx_compile_options(${component})
 SceneRdl2_link_options(${component})
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(${component}
+        PRIVATE
+            /wd4083 # found identifier 'push' 'disable' 'pop' in Types.cc
+    )
+endif()
+
 # -------------------------------------
 # Install the target and the export set
 # -------------------------------------

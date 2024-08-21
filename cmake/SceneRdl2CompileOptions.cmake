@@ -65,6 +65,14 @@ function(SceneRdl2_cxx_compile_options target)
             PRIVATE
                 -march=core-avx2                # Specify the name of the target architecture
         )
+    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        target_compile_options(${target}
+            # TODO: Some if not all of these should probably be PUBLIC
+            PRIVATE
+                /arch:AVX2                      # Specify the name of the target architecture
+                /Zc:__cplusplus                 # Make sure the preprocessor is defined to check for C++ version
+                /wd4293                         # '>>': shift count negative or too big, undefined behavior
+        )
     endif()
 endfunction()
 
@@ -73,7 +81,6 @@ function(SceneRdl2_ispc_compile_options target)
     set(commonOptions
 	${GLOBAL_ISPC_FLAGS}
         --opt=force-aligned-memory          # always issue "aligned" vector load and store instructions
-        --pic                               # Generate position-independent code.  Ignored for Windows target
         #--werror                            # Treat warnings as errors
         # --wno-perf                          # Don't issue warnings related to performance-related issues
     )
@@ -87,6 +94,8 @@ function(SceneRdl2_ispc_compile_options target)
         get_target_property(ISPC_HEADER_SUFFIX ${target} ISPC_HEADER_SUFFIX)
         get_target_property(ISPC_HEADER_DIRECTORY ${target} ISPC_HEADER_DIRECTORY)
         get_target_property(ISPC_INSTRUCTION_SETS ${target} ISPC_INSTRUCTION_SETS)
+        get_target_property(ISPC_ARCH ${target} ISPC_ARCH)
+        get_target_property(ISPC_TARGET_OS ${target} ISPC_TARGET_OS)
 
         set(configDepFlags "")
         if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -124,9 +133,9 @@ function(SceneRdl2_ispc_compile_options target)
                     -o ${objOut}
                     -h "./${ISPC_HEADER_DIRECTORY}/${srcName}${ISPC_HEADER_SUFFIX}"
                     -M -MF ${depFile}
-                    --arch=aarch64                      # TODO: hardcoded...
+                    --arch=${ISPC_ARCH}
                     --target=${ISPC_INSTRUCTION_SETS}
-                    --target-os=macos
+                    --target-os=${ISPC_TARGET_OS}
                     ${commonOptions}
                     ${configDepFlags}
                     "-I$<JOIN:$<TARGET_PROPERTY:${target},INCLUDE_DIRECTORIES>,;-I>"
@@ -139,6 +148,8 @@ function(SceneRdl2_ispc_compile_options target)
         endforeach()
         target_link_libraries(${target}
                 PRIVATE ${ISPC_TARGET_OBJECTS})
+        target_sources(${target}
+            PRIVATE ${ISPC_TARGET_OBJECTS})
         add_custom_target(${target}_ispc_dep DEPENDS ${ISPC_TARGET_OBJECTS})
         add_dependencies(${target} ${target}_ispc_dep)
         set_property(TARGET ${target}

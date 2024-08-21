@@ -1,7 +1,11 @@
 -- Copyright 2023-2024 DreamWorks Animation LLC
 -- SPDX-License-Identifier: Apache-2.0
 
-local data = io.read("*all")
+local rdlalib_out = io.open("rdlalib.out", "rb")
+local data = rdlalib_out:read("*a")
+rdlalib_out:close()
+local rdlalib_cc = io.open("rdlalib.cc", "w+b")
+io.output(rdlalib_cc)
 
 io.write("// Copyright 2023-2024 DreamWorks Animation LLC\n")
 io.write("// SPDX-License-Identifier: Apache-2.0\n")
@@ -30,3 +34,5 @@ io.write("\n};\n")
 io.write("\n")
 io.write("} // namespace\n")
 io.write("\n")
+
+io.close(rdlalib_cc)
