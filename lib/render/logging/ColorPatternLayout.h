@@ -25,7 +25,7 @@ class ColorPatternLayout : public log4cplus::PatternLayout
     typedef std::map<log4cplus::LogLevel, Color> ColorMap;
     
   public:
-    ColorPatternLayout(const std::string& ptrn);
+    ColorPatternLayout(const log4cplus::tstring& ptrn);
     ColorPatternLayout(const log4cplus::helpers::Properties& props);
     
 

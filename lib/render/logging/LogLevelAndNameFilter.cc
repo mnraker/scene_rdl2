@@ -42,13 +42,13 @@ LogLevelAndNameFilter::LogLevelAndNameFilter(const log4cplus::LogLevel level,
 
 LogLevelAndNameFilter::LogLevelAndNameFilter(const Properties& props)
 {
-    tstring tmp = props.getProperty("AcceptOnMatch");
-    mAcceptOnMatch = (toLower(tmp) == "true");
+    tstring tmp = props.getProperty(LOG4CPLUS_C_STR_TO_TSTRING("AcceptOnMatch"));
+    mAcceptOnMatch = (toLower(tmp) == LOG4CPLUS_C_STR_TO_TSTRING("true"));
 
-    tmp = props.getProperty("LogLevelToMatch");
+    tmp = props.getProperty(LOG4CPLUS_C_STR_TO_TSTRING("LogLevelToMatch"));
     mLogLevelToMatch = getLogLevelManager().fromString(tmp);
 
-    tmp = props.getProperty("LoggerNamesToMatch");
+    tmp = props.getProperty(LOG4CPLUS_C_STR_TO_TSTRING("LoggerNamesToMatch"));
     setLoggerNames(tmp);
 }
 
@@ -64,19 +64,19 @@ LogLevelAndNameFilter::setLogLevel(const log4cplus::LogLevel level)
 }
 
 void
-LogLevelAndNameFilter::setLoggerNames(const std::string& names)
+LogLevelAndNameFilter::setLoggerNames(const log4cplus::tstring& names)
 {
     mLoggerNamesToMatch.clear();
-    boost::split(mLoggerNamesToMatch, names, boost::is_any_of(", "));
+    boost::split(mLoggerNamesToMatch, LOG4CPLUS_TSTRING_TO_STRING(names), boost::is_any_of(", "));
 }
 
 bool
-LogLevelAndNameFilter::matchLoggerName(const std::string& name) const
+LogLevelAndNameFilter::matchLoggerName(const log4cplus::tstring& name) const
 {
     LoggerNameList::const_iterator iter = mLoggerNamesToMatch.begin();
 
     while (iter != mLoggerNamesToMatch.end()) {
-        if (boost::algorithm::starts_with(name, *iter)) return true;
+        if (boost::algorithm::starts_with(LOG4CPLUS_TSTRING_TO_STRING(name), *iter)) return true;
         ++iter;
     }
 

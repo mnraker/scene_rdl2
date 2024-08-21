@@ -34,9 +34,9 @@ class LogLevelAndNameFilter : public log4cplus::spi::Filter
 
     void setLogLevel(const log4cplus::LogLevel level); 
     
-    void setLoggerNames(const std::string& names);
+    void setLoggerNames(const log4cplus::tstring& names);
     
-    bool matchLoggerName(const std::string& name) const;
+    bool matchLoggerName(const log4cplus::tstring& name) const;
     
   private:
     

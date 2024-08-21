@@ -157,7 +157,7 @@ initializeLogging()
 #endif
 
         UNIQUE_PTR<log4cplus::Layout> layout(
-                new ColorPatternLayout(configs[i].pattern));
+                new ColorPatternLayout(LOG4CPLUS_C_STR_TO_TSTRING(configs[i].pattern)));
 
 #if defined(__ICC)
         __pragma(warning(default:1478));
@@ -170,7 +170,7 @@ initializeLogging()
         filter->appendFilter(log4cplus::spi::FilterPtr (new logging::LogLevelAndNameFilter(configs[i].level)));
         filter->appendFilter(log4cplus::spi::FilterPtr (new log4cplus::spi::DenyAllFilter()));
 
-        appender->setName(configs[i].name);
+        appender->setName(LOG4CPLUS_C_STR_TO_TSTRING(configs[i].name));
         appender->setLayout(MOVE_LAYOUT(layout));
         appender->setThreshold(configs[i].threshold);
         appender->setFilter(filter);
@@ -205,7 +205,7 @@ getDefaultLogger(const std::string& file)
     LoggerMap::const_iterator entry = registry.lookup(file);
 
     if (entry != registry.end()) {
-        return log4cplus::Logger::getInstance(entry->second);
+        return log4cplus::Logger::getInstance(LOG4CPLUS_STRING_TO_TSTRING(entry->second));
     }
 
     // Filename was not found in the map, revert to the default regexp
@@ -235,7 +235,7 @@ getDefaultLogger(const std::string& file)
     // If the regexp match succeeded, store the name of mapped logger
     // and return the logger to the caller.
     registry.insert(file, name);
-    return log4cplus::Logger::getInstance(name);
+    return log4cplus::Logger::getInstance(LOG4CPLUS_STRING_TO_TSTRING(name));
 }
 
 void
@@ -248,7 +248,7 @@ void
 outputLog(LogLevel level,
           const std::string& s)
 {
-    getDefaultLogger(__FILE__).log(level, s, __FILE__, __LINE__);
+    getDefaultLogger(__FILE__).log(level, LOG4CPLUS_STRING_TO_TSTRING(s), __FILE__, __LINE__);
 }
 
 void
