@@ -14,8 +14,10 @@
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
-#include <unistd.h>
-#include <getopt.h>
+#ifndef _MSC_VER
+    #include <unistd.h>
+    #include <getopt.h>
+#endif
 #include <cstring>
 
 
