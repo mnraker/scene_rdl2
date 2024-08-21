@@ -274,10 +274,10 @@ namespace py_scene_rdl2
         {
             return (
 #ifndef IS_PY3
-                PyInt_CheckExact(objPtr) == true ||
+                (bool)PyInt_CheckExact(objPtr) == true ||
 #endif
-                PyLong_CheckExact(objPtr) == true ||
-                PyFloat_CheckExact(objPtr) == true);
+                (bool)PyLong_CheckExact(objPtr) == true ||
+                (bool)PyFloat_CheckExact(objPtr) == true);
         }
 
         template <typename T, typename PythonContainer>
@@ -359,7 +359,7 @@ namespace py_scene_rdl2
             // we need to contruct objects of type T using inner lists/tuples.
             PyObject* containerPtr = pycontainer.ptr();
             PyObject* contentsamplePtr = nullptr;
-            if (PyList_CheckExact(containerPtr) == true) {
+            if ((bool)PyList_CheckExact(containerPtr) == true) {
                 contentsamplePtr = PyList_GET_ITEM(containerPtr, 0);
             }
             // Considering static_assert at the top, no need to check for bp::tuple,
@@ -378,7 +378,7 @@ namespace py_scene_rdl2
             //      (2) std::vector<T>::reserve( len(pycontainer) )
             //      (3) go over inner lists one by one, build and push T to vector
             //
-            if (PyList_CheckExact(contentsamplePtr) == true) {
+            if ((bool)PyList_CheckExact(contentsamplePtr) == true) {
                 constexpr std::size_t T_size = getElementCount<T>();
                 if (T_size != PyList_GET_SIZE(contentsamplePtr)) {
                     throw std::runtime_error("TEMP DEBUG: In helper function "
@@ -407,7 +407,7 @@ namespace py_scene_rdl2
             //      (2) std::vector<T>::reserve( len(pycontainer) )
             //      (3) go over inner tuples one by one, build and push T to vector
             //
-            else if (PyTuple_CheckExact(contentsamplePtr) == true) {
+            else if ((bool)PyTuple_CheckExact(contentsamplePtr) == true) {
                 constexpr std::size_t T_size = getElementCount<T>();
                 if (T_size != PyTuple_GET_SIZE(contentsamplePtr)) {
                     throw std::runtime_error("TEMP DEBUG: In helper function "
@@ -519,7 +519,7 @@ namespace py_scene_rdl2
             // we need to contruct objects of type T using inner lists/tuples.
             PyObject* containerPtr = pycontainer.ptr();
             PyObject* contentsamplePtr = nullptr;
-            if (PyList_CheckExact(containerPtr) == true) {
+            if ((bool)PyList_CheckExact(containerPtr) == true) {
                 contentsamplePtr = PyList_GET_ITEM(containerPtr, 0);
             }
             // Considering static_assert at the top, no need to check for bp::tuple,
@@ -539,7 +539,7 @@ namespace py_scene_rdl2
             //      (2) std::vector<T>::reserve( len(pycontainer) )
             //      (3) go over inner lists one by one, build and push T to vector
             //
-            if (PyList_CheckExact(contentsamplePtr) == true) {
+            if ((bool)PyList_CheckExact(contentsamplePtr) == true) {
                 if (T_size != PyList_GET_SIZE(contentsamplePtr)) {
                     throw std::runtime_error("TEMP DEBUG: In helper function "
                             "conversions::PyMatrixContainerToStdVector<T, PythonContainer>(), "
@@ -571,7 +571,7 @@ namespace py_scene_rdl2
             //      (2) std::vector<T>::reserve( len(pycontainer) )
             //      (3) go over inner tuples one by one, build and push T to vector
             //
-            else if (PyTuple_CheckExact(contentsamplePtr) == true) {
+            else if ((bool)PyTuple_CheckExact(contentsamplePtr) == true) {
                 if (T_size != PyTuple_GET_SIZE(contentsamplePtr)) {
                     throw std::runtime_error("TEMP DEBUG: In helper function "
                             "conversions::PyMatrixContainerToStdVector<T, PythonContainer>(), "
