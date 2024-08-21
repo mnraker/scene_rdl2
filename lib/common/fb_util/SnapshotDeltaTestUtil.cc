@@ -555,8 +555,12 @@ SnapshotDeltaTestUtil<T, W>::allocVecValueAlign(const std::vector<T>& vec)
     static constexpr size_t alignedSize = 4096; // typical page size of x86-64 processors
 
     size_t size = vec.size() * sizeof(T);
+#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600)
     void* addr;
     posix_memalign(&addr, alignedSize, size);
+#elif defined(_MSC_VER)
+    void* addr = _aligned_malloc(size, alignedSize);
+#endif
 
     std::memcpy(addr, &vec[0], size);
     return addr;
@@ -569,8 +573,12 @@ SnapshotDeltaTestUtil<T, W>::allocVecWeightAlign(const std::vector<W>& vec)
     static constexpr size_t alignedSize = 4096; // typical page size of x86-64 processors
 
     size_t size = vec.size() * sizeof(W);
+#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600)
     void* addr;
     posix_memalign(&addr, alignedSize, size);
+#elif defined(_MSC_VER)
+    void* addr = _aligned_malloc(size, alignedSize);
+#endif
 
     std::memcpy(addr, &vec[0], size);
     return addr;
@@ -583,8 +591,12 @@ SnapshotDeltaTestUtil<T, W>::allocVecValueAlign(size_t w, size_t h, size_t numCh
     static constexpr size_t alignedSize = 4096;
 
     size_t size = w * h * numChan * sizeof(T);
+#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600)
     void* addr;
     posix_memalign(&addr, alignedSize, size);
+#elif defined(_MSC_VER)
+    void* addr = _aligned_malloc(size, alignedSize);
+#endif
     return addr;
 }
 
@@ -595,8 +607,12 @@ SnapshotDeltaTestUtil<T, W>::allocVecWeightAlign(size_t w, size_t h)
     static constexpr size_t alignedSize = 4096;
 
     size_t size = w * h * sizeof(W);
+#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600)
     void* addr;
     posix_memalign(&addr, alignedSize, size);
+#elif defined(_MSC_VER)
+    void* addr = _aligned_malloc(size, alignedSize);
+#endif
     return addr;
 }
 
