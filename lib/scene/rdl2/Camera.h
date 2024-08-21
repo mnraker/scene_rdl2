@@ -57,17 +57,17 @@ public:
         return false;
     }
 
-    static AttributeKey<Float> sNearKey;
-    static AttributeKey<Float> sFarKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sNearKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sFarKey;
 
-    static AttributeKey<Float> sMbShutterOpenKey;
-    static AttributeKey<Float> sMbShutterCloseKey;
-    static AttributeKey<Float> sMbShutterBiasKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sMbShutterOpenKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sMbShutterCloseKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Float> sMbShutterBiasKey;
 
-    static AttributeKey<String> sPixelSampleMap;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sPixelSampleMap;
 
-    static AttributeKey<SceneObject*> sMediumMaterial;
-    static AttributeKey<SceneObject*> sMediumGeometry;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject*> sMediumMaterial;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObject*> sMediumGeometry;
 
 private:
     friend class SceneContext;

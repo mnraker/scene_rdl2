@@ -99,7 +99,7 @@ public:
     bool includeInBVH() const { return mIncludeInBVH; }
 
 protected:
-    static AttributeKey<SceneObjectIndexable> sGeometriesKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectIndexable> sGeometriesKey;
     bool mIncludeInBVH;
 };
 

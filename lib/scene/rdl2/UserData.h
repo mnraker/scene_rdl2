@@ -105,36 +105,36 @@ public:
     int getRate() const;
 
 private:
-    static AttributeKey<String> sAttrBoolKey;
-    static AttributeKey<BoolVector> sAttrBoolValues;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrBoolKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<BoolVector> sAttrBoolValues;
 
-    static AttributeKey<String> sAttrIntKey;
-    static AttributeKey<IntVector> sAttrIntValues;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrIntKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<IntVector> sAttrIntValues;
 
-    static AttributeKey<String> sAttrFloatKey;
-    static AttributeKey<FloatVector> sAttrFloatValues0;
-    static AttributeKey<FloatVector> sAttrFloatValues1;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrFloatKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<FloatVector> sAttrFloatValues0;
+    RDL2_DSO_BUILTIN_API static AttributeKey<FloatVector> sAttrFloatValues1;
 
-    static AttributeKey<String> sAttrStringKey;
-    static AttributeKey<StringVector> sAttrStringValues;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrStringKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<StringVector> sAttrStringValues;
 
-    static AttributeKey<String> sAttrColorKey;
-    static AttributeKey<RgbVector> sAttrColorValues0;
-    static AttributeKey<RgbVector> sAttrColorValues1;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrColorKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<RgbVector> sAttrColorValues0;
+    RDL2_DSO_BUILTIN_API static AttributeKey<RgbVector> sAttrColorValues1;
 
-    static AttributeKey<String> sAttrVec2fKey;
-    static AttributeKey<Vec2fVector> sAttrVec2fValues0;
-    static AttributeKey<Vec2fVector> sAttrVec2fValues1;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrVec2fKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec2fVector> sAttrVec2fValues0;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec2fVector> sAttrVec2fValues1;
 
-    static AttributeKey<String> sAttrVec3fKey;
-    static AttributeKey<Vec3fVector> sAttrVec3fValues0;
-    static AttributeKey<Vec3fVector> sAttrVec3fValues1;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrVec3fKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec3fVector> sAttrVec3fValues0;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Vec3fVector> sAttrVec3fValues1;
 
-    static AttributeKey<String> sAttrMat4fKey;
-    static AttributeKey<Mat4fVector> sAttrMat4fValues0;
-    static AttributeKey<Mat4fVector> sAttrMat4fValues1;
+    RDL2_DSO_BUILTIN_API static AttributeKey<String> sAttrMat4fKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Mat4fVector> sAttrMat4fValues0;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Mat4fVector> sAttrMat4fValues1;
 
-    static AttributeKey<Int> sAttrRateKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Int> sAttrRateKey;
 };
 
 template<>

@@ -61,7 +61,7 @@ public:
 
     bool haveGeometriesChanged() const { return hasChanged(sGeometriesKey); }
 
-    static AttributeKey<Bool> sComplementKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sComplementKey;
 };
 
 template <>

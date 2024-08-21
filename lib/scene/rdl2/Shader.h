@@ -166,7 +166,7 @@ protected:
     // Registry of possible logging events, used for logging while shading.
     // Shared amongst all shaders
     //
-    static ShaderLogEventRegistry sLogEventRegistry;
+    RDL2_DSO_BUILTIN_API static ShaderLogEventRegistry sLogEventRegistry;
 
     //
     // The list of attributes required specifically by this Shader.

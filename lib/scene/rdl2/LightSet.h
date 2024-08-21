@@ -90,7 +90,7 @@ public:
     void clear();
 
 protected:
-    static AttributeKey<SceneObjectVector> sLightsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectVector> sLightsKey;
 };
 
 const SceneObjectVector& LightSet::getLights() const { return get(sLightsKey); }

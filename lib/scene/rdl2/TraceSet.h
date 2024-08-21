@@ -153,8 +153,8 @@ public:
 
 protected:
     friend AsciiWriter;
-    static AttributeKey<SceneObjectIndexable> sGeometriesKey;
-    static AttributeKey<StringVector> sPartsKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<SceneObjectIndexable> sGeometriesKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<StringVector> sPartsKey;
 };
 
 template <>

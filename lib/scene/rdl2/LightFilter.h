@@ -24,7 +24,7 @@ public:
     virtual void getReferencedLightFilters(std::unordered_set<const rdl2::LightFilter *>& filters) const {}
 
     // Attributes common to all LightFilters.
-    static AttributeKey<Bool> sOnKey;
+    RDL2_DSO_BUILTIN_API static AttributeKey<Bool> sOnKey;
 };
 
 template <>
