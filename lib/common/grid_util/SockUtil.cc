@@ -5,8 +5,12 @@
 //
 #include "SockUtil.h"
 
+#ifndef _MSC_VER
 #include <sys/socket.h>
 #include <sys/types.h>
+#else
+#include <scene_rdl2/common/platform/Endian.h> // brings in winsock2.h
+#endif
 
 namespace scene_rdl2 {
 namespace grid_util {
