@@ -56,6 +56,8 @@
 #ifndef __APPLE__
 #ifdef __INTEL_COMPILER 
 // We don't need any include for half float instructions
+#elif _MSC_VER
+#include <intrin.h>
 #else // else __INTEL_COMPILER
 #include <x86intrin.h>          // _mm_cvtps_ph, _cvtph_ps : for GCC build
 #endif // end !__INTEL_COMPILER
@@ -609,9 +611,11 @@ private:
     inline static unsigned short ftoh(const float f)
     {
 #if defined(__ARM_NEON__)   // TODO: Verify this
-	__fp16 output;
-	vst1_f16(&output, vcvt_f16_f32(vld1q_f32(&f)));
-	return output;
+        __fp16 output;
+        vst1_f16(&output, vcvt_f16_f32(vld1q_f32(&f)));
+        return output;
+#elif defined(_MSC_VER)
+        return _mm_extract_epi16(_mm_cvtps_ph(_mm_set_ss(f), 0), 0); // no _cvtss_sh for MSVC
 #else
         return _cvtss_sh(f, 0); // Convert full 32bit float to half 16bit float
                                 // An immediate value controlling rounding using bits : 0=Nearest
@@ -621,9 +625,11 @@ private:
     inline static float htof(const unsigned short h)
     {
 #if defined(__ARM_NEON__)   // TODO: Verify this
-	float output;
-	vst1q_f32(&output, vcvt_f32_f16(vld1_u16(&h)));
-	return output;
+        float output;
+        vst1q_f32(&output, vcvt_f32_f16(vld1_u16(&h)));
+        return output;
+#elif defined(_MSC_VER)
+        return _mm_cvtss_f32(_mm_cvtph_ps(_mm_set1_epi16(h))); // no _cvtsh_ss for MSVC
 #else
         return _cvtsh_ss(h); // Convert half 16bit float to full 32bit float
 #endif

@@ -6,12 +6,16 @@
 #include <scene_rdl2/render/util/StrUtil.h>
 
 #include <iostream>
+#ifndef _MSC_VER
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/time.h> // gettimeofday()
+#endif
 
 namespace scene_rdl2 {
 namespace grid_util {
+
+#ifndef _MSC_VER
 
 void
 ShmFootmark::reset()
@@ -227,6 +231,119 @@ ShmFootmarkView::calcMemSize() const
     }
     return 0; // overflow
 }
+
+#else
+
+void
+ShmFootmark::reset()
+{
+}
+
+bool
+ShmFootmark::set(const std::string& msg)
+{
+    return true;
+}
+
+bool
+ShmFootmark::add(const std::string& msg)
+{
+    return true;
+}
+
+void
+ShmFootmark::push()
+{
+}
+
+void    
+ShmFootmark::pop()
+{
+}
+
+std::string
+ShmFootmark::getAll()
+{
+    return std::string();
+}
+
+std::string
+ShmFootmark::show() const
+{
+    return std::string();
+}
+
+//------------------------------
+
+void
+ShmFootmark::init(const std::string& msg)
+{
+}
+
+void
+ShmFootmark::attachShMem()
+{
+}
+
+void
+ShmFootmark::initShMem()
+{
+}
+
+void
+ShmFootmark::initStackInfo()
+{
+}
+
+void
+ShmFootmark::setTitleAndTimeStamp(const std::string& title)
+{
+}
+
+size_t
+ShmFootmark::getCurrStackMsgSize() const
+{
+    return 0;
+}
+
+std::string
+ShmFootmark::showStackOffset() const
+{
+    return std::string();
+}
+
+// static function
+std::string
+ShmFootmark::currentTimeStr()
+{
+    return std::string();
+}
+
+//------------------------------------------------------------------------------------------
+
+std::string
+ShmFootmarkView::getAll()
+{
+    return std::string();
+}
+
+void
+ShmFootmarkView::freeShMem()
+{
+}
+
+void
+ShmFootmarkView::attachShMem()
+{
+}
+
+size_t
+ShmFootmarkView::calcMemSize() const
+{
+    return 0;
+}
+
+#endif // #ifndef _MSC_VER
 
 } // namespace grid_util
 } // namespace scene_rdl2

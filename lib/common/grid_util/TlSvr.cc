@@ -6,15 +6,20 @@
 #include "SockUtil.h"
 
 #include <scene_rdl2/render/util/StrUtil.h>
-
 #include <iostream>
 
 #include <fcntl.h>              // ::fcntl()
-#include <netinet/in.h>         // struct sockaddr_in
-#include <netinet/tcp.h>        // TCP_NODELAY
 #include <string.h>
-#include <sys/socket.h>         // ::socket()
-#include <unistd.h>             // ::read()
+#ifndef _MSC_VER
+    #include <netinet/in.h>         // struct sockaddr_in
+    #include <netinet/tcp.h>        // TCP_NODELAY
+    #include <sys/socket.h>         // ::socket()
+    #include <unistd.h>             // ::read()
+#else
+    #include <scene_rdl2/common/platform/Endian.h> // brings in winsock2.h
+    #include <ws2tcpip.h>
+    #include <io.h>
+#endif
 
 namespace scene_rdl2 {
 namespace grid_util {
@@ -110,7 +115,11 @@ TlSvr::recv(std::string &recvStr,
 
     char c;
     while (1) {
+#ifndef _MSC_VER
         int rSize = static_cast<int>(::read(mSock, &c, 1)); // read 1byte
+#else
+        int rSize = static_cast<int>(::_read(mSock, &c, 1)); // read 1byte
+#endif
 
         if (rSize == 0) {
             if (mRecvSize == 0) {
@@ -194,7 +203,11 @@ TlSvr::send(const std::string &sendStr,
     const char* cPtr = sendStr.c_str();
     int size = (int)sendStr.size();
     while (1) {
+#ifndef _MSC_VER
         int wSize = static_cast<int>(::write(mSock, cPtr, size));
+#else
+        int wSize = static_cast<int>(::_write(mSock, cPtr, size));
+#endif
         if (wSize == 0) {
             continue;           // retry 
         } else if (wSize < 0) {
@@ -226,12 +239,20 @@ void
 TlSvr::close()
 {
     if (mSock != -1) {
+#ifndef _MSC_VER
         ::close(mSock);
+#else
+        ::_close(mSock);
+#endif
         mSock = -1;
     }
 
     if (mBaseSock != -1) {
+#ifndef _MSC_VER
         ::close(mBaseSock);
+#else
+        ::_close(mBaseSock);
+#endif
         mBaseSock = -1;
     }
 
@@ -270,7 +291,11 @@ TlSvr::setupServerPort(INFOMSG_CALLBACK infoMsgCallBack,
 
         // compute mSock
         if (!acceptSocket(infoMsgCallBack, errMsgCallBack)) {
+#ifndef _MSC_VER
             ::close(mBaseSock);
+#else
+            ::_close(mBaseSock);
+#endif
             mBaseSock = -1;
             return false;
         }
@@ -287,7 +312,11 @@ TlSvr::socketBindAndListen(INFOMSG_CALLBACK infoMsgCallBack,
         return true;
     }
 
+#ifndef _MSC_VER
     if ((mBaseSock = ::socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+#else
+    if ((mBaseSock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+#endif
         mBaseSock = -1;
         if (errMsgCallBack) {
             errMsgCallBack(str_util::stringCat(msgHead, " ::socket() call failed for baseSock"));
@@ -299,12 +328,19 @@ TlSvr::socketBindAndListen(INFOMSG_CALLBACK infoMsgCallBack,
     // Set the close-on-exec flag so that the socket will not get
     // inherited by child processes. Toshi (Aug/14/2014)
     //
+#ifndef _MSC_VER
     fcntl(mBaseSock, F_SETFD, FD_CLOEXEC);
+#endif
 
     //
     // set non blocking ::accept()
     //
+#ifndef _MSC_VER
     fcntl(mBaseSock, F_SETFL, FNDELAY);
+#else
+    u_long iMode = 0;
+    ioctlsocket(mBaseSock, FIONBIO, &iMode);
+#endif
 
     //
     // Set up to reuse server addresses automatically and bind to the specified port.
@@ -312,7 +348,11 @@ TlSvr::socketBindAndListen(INFOMSG_CALLBACK infoMsgCallBack,
     int status = 1;
     (void)setsockopt(mBaseSock, SOL_SOCKET, SO_REUSEADDR, (char *)&status, sizeof(status));
     if (status == -1) {
+#ifndef _MSC_VER
         ::close(mBaseSock);
+#else
+        ::_close(mBaseSock);
+#endif
         mBaseSock = -1;
         if (errMsgCallBack) {
             errMsgCallBack(str_util::stringCat(msgHead, " set socket option failed. (SO_REUSEADDR)"));
@@ -324,7 +364,7 @@ TlSvr::socketBindAndListen(INFOMSG_CALLBACK infoMsgCallBack,
     // setup socket info
     //
     struct sockaddr_in in;
-    bzero(&in, sizeof(in));
+    memset(&in, sizeof(in), 0);
     in.sin_family = AF_INET;
     in.sin_addr.s_addr = INADDR_ANY;
     in.sin_port = htons(static_cast<uint16_t>(mPort)); // put in net order
@@ -333,7 +373,11 @@ TlSvr::socketBindAndListen(INFOMSG_CALLBACK infoMsgCallBack,
     // bind the socket to the port number
     //
     if (::bind(mBaseSock, (struct sockaddr*)&in, sizeof(in)) < 0) {
+#ifndef _MSC_VER
         ::close(mBaseSock);
+#else
+        ::_close(mBaseSock);
+#endif
         if (errMsgCallBack) {
             errMsgCallBack(str_util::stringCat(msgHead,
                                                " ::bind() socket failed. port:",
@@ -354,7 +398,11 @@ TlSvr::socketBindAndListen(INFOMSG_CALLBACK infoMsgCallBack,
         //
         socklen_t inLen = sizeof(in);
         if (::getsockname(mBaseSock, (sockaddr*)&in, &inLen) != 0) {
+#ifndef _MSC_VER
             ::close(mBaseSock);
+#else
+            ::_close(mBaseSock);
+#endif
             mBaseSock = -1;
             if (errMsgCallBack) {
                 errMsgCallBack(str_util::stringCat(msgHead, " ::getsockname() failed"));
@@ -372,7 +420,11 @@ TlSvr::socketBindAndListen(INFOMSG_CALLBACK infoMsgCallBack,
     // do listen
     //
     if (::listen(mBaseSock, 5) < 0) {
+#ifndef _MSC_VER
         ::close(mBaseSock);
+#else
+        ::_close(mBaseSock);
+#endif
         mBaseSock = -1;
         if (errMsgCallBack) {
             errMsgCallBack(str_util::stringCat(msgHead,
@@ -393,9 +445,13 @@ TlSvr::acceptSocket(INFOMSG_CALLBACK infoMsgCallBack, ERRMSG_CALLBACK errMsgCall
     }
 
     struct sockaddr_in in2;
+#ifndef _MSC_VER
     unsigned int addrlen = sizeof(in2);
-
     if ((mSock = ::accept(mBaseSock, (struct sockaddr *)&in2, &addrlen)) == -1) {
+#else
+    int addrlen = sizeof(in2);
+    if ((mSock = accept(mBaseSock, (struct sockaddr *)&in2, &addrlen)) == INVALID_SOCKET) {
+#endif
         int errNum = errno;
         if (errNum == EAGAIN) { // Resource temporarily unavailable => retry later
             return true;
@@ -440,7 +496,12 @@ TlSvr::acceptSocket(INFOMSG_CALLBACK infoMsgCallBack, ERRMSG_CALLBACK errMsgCall
     //
     // set non blocking
     //
+#ifndef _MSC_VER
     if (::fcntl(mSock, F_SETFL, FNDELAY) < 0) {
+#else
+    u_long iMode = 0;
+    if (ioctlsocket(mBaseSock, FIONBIO, &iMode) == SOCKET_ERROR) {
+#endif
         if (errMsgCallBack) {
             errMsgCallBack(str_util::stringCat(msgHead, " set non blocking status for newSocket failed"));
         }
@@ -457,7 +518,11 @@ TlSvr::acceptSocket(INFOMSG_CALLBACK infoMsgCallBack, ERRMSG_CALLBACK errMsgCall
     //
     // close base socket in order to refuse other connection.
     //
+#ifndef _MSC_VER
     ::close(mBaseSock);
+#else
+    ::_close(mBaseSock);
+#endif
     mBaseSock = -1;
 
     return true;
@@ -467,6 +532,11 @@ void
 TlSvr::connectionClosed(INFOMSG_CALLBACK infoMsgCallBack)
 {
     ::close(mSock);
+#ifndef _MSC_VER
+    ::close(mSock);
+#else
+    ::_close(mSock);
+#endif
     mSock = -1;
     mConnectionReady = false;
 
